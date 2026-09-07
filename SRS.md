@@ -8,10 +8,10 @@ Version 1.0
 ---
 
 ## Revision History
-<!-- Vaishnavi: fill in last, once all sections are merged -->
+<!-- Sanjana: fill in last, once all sections are merged -->
 
 ## Table of Contents
-<!-- Vaishnavi: fill in last, once all sections are merged -->
+
 
 ---
 
@@ -19,6 +19,7 @@ Version 1.0
 <!-- OWNER: Tejas -->
 
 ### 1.1 Purpose
+This document specifies the software requirements for the Online Quiz System, Version 1.0. The Online Quiz System is a console-based (command-line) application developed in C/C++ that presents users with multiple-choice questions and calculates their score based on the answers submitted. This SRS describes the functional and nonfunctional requirements of the system to guide its design, implementation, and testing.
 
 ### 1.2 Intended Audience
 
@@ -106,10 +107,10 @@ Version 1.0
 ---
 
 ## Appendix A: Glossary
-<!-- OWNER: Vaishnavi -->
+<!-- OWNER: Vikas -->
 
 ## Appendix B: Field Layouts
 <!-- OWNER: Vaishnavi -->
 
 ## Appendix C: Requirement Traceability Matrix
-<!-- OWNER: Vaishnavi -->
+<!-- OWNER: Sanjana -->
