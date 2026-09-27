@@ -84,15 +84,65 @@ There is no separate administrator role, login system, or web-based interface in
 <!-- OWNER: Sanjana -->
 
 ### 3.1 User Interfaces
+- The Online Quiz System shall provide a console-based user interface through which the user can navigate the quiz and view the results. 
+- The main menu shall provide options for starting the quiz, viewing the leaderboard, viewing instructions, and exiting the system. The user shall select an option by entering the corresponding choice. 
+- During the quiz, the system shall display one question at a time along with four answer options identified as A, B, C, and D. The system shall prompt the user to enter the selected answer. 
+- After the quiz is completed, the result screen shall display the user's quiz result, including the score and percentage as applicable. 
+- The system shall use consistent formatting for menus, questions, options, results, and prompts. Invalid user input shall be accompanied by a clear error message prefixed with "Error:" and the user shall be prompted to provide a valid input.
 
 ### 3.2 Software Interfaces
+- The Online Quiz System shall run as a C/C++ console application using a standard C/C++ compiler and shall operate through a terminal or console window.
+- The question bank shall contain multiple-choice questions, with each question having four answer options and exactly one correct option. The question bank shall be maintained locally by the team and shall not require an external database or web service.
+- The system shall use a local text file named results.txt to store completed quiz results. Each stored record shall contain the player's name and final score. The stored results shall be available for retrieval when the user views the leaderboard.
 
 ### 3.3 Communications Interfaces
+- The Online Quiz System shall operate as a standalone offline console application. 
+- No network connection or external communication interface shall be required for the system to perform its core functions. 
+- The system shall not require communication with external servers, web services, or APIs.
 
 ### 3.4 Hardware Interfaces
+- The Online Quiz System shall not require any specialized hardware. 
+- The user shall provide input through a standard keyboard, including menu selections and quiz answers. The system shall display menus, questions, answer options, results, and error messages through the computer's console or terminal display.
+- The system shall operate on standard desktop or laptop hardware capable of running the required C/C++ environment.
 
 ### 3.5 Analysis Models
-
+              ┌─────────┐
+              │  Start  │
+              └────┬────┘
+                   ↓
+          ┌─────────────────┐
+          │   Main Menu     │
+          └────────┬────────┘
+                   ↓
+          ┌─────────────────┐
+          │    Take Quiz    │
+          └────────┬────────┘
+                   ↓
+          ┌─────────────────┐
+          │ Display Question│
+          │   + Options     │
+          └────────┬────────┘
+                   ↓
+          ┌─────────────────┐
+          │ Capture Answer  │
+          └────────┬────────┘
+                   ↓
+             More Questions?
+              /          \
+            Yes           No
+             ↓             ↓
+      Display Next      ┌─────────┐
+       Question         │  Score  │
+             │          └────┬────┘
+             └───→          ↓
+                    ┌────────────────┐
+                    │  Save Result   │
+                    └───────┬────────┘
+                            ↓
+                       ┌──────────┐
+                       │ Menu /   │
+                       │   Exit   │
+                       └──────────┘
 ---
 
 ## 4. System Features
@@ -127,9 +177,18 @@ The Main Menu is the entry point of the Online Quiz System. On launch, it presen
 <!-- OWNER: Sanjana -->
 
 #### Description and Priority
-#### Stimulus/Response Sequences
-#### Functional Requirements
+The Quiz Engine shall manage the delivery of multiple-choice questions during a quiz. It shall display one question at a time along with its available answer options, accept the user's selected answer, validate the input, and proceed to the next question until all questions have been presented.
 
+#### Stimulus/Response Sequences
+The user selects the option to start the quiz from the main menu. The system displays the first question along with its answer options. The user enters a selected option. The system validates the selected option and records the answer before displaying the next question. This process continues until all questions in the quiz have been presented.
+
+#### Functional Requirements
+- REQ-QE-1: The system shall load the available multiple-choice questions for the quiz, with each question having exactly one correct answer. (priority: high and verification: functional test)
+- REQ-QE-2: The system shall display one question at a time along with its available answer options. (priority: high and verification: functional test)
+- REQ-QE-3: The system shall accept the user's selected answer and shall validate that the entered choice corresponds to one of the available answer options. (priority: high and verification: functional test)
+- REQ-QE-4: The system shall record the user's selected answer before proceeding to the next question. (priority: high and verification: functional test)
+- REQ-QE-5: The system shall proceed to the next question after a valid answer has been recorded. (priority: high and verification: functional test)
+- REQ-QE-6: The system shall continue presenting questions until all questions in the quiz have been completed. (priority: high and verification: functional test)
 ---
 
 ### 4.3 Scoring & Result Calculation
