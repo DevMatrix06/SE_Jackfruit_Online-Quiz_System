@@ -84,12 +84,23 @@ There is no separate administrator role, login system, or web-based interface in
 <!-- OWNER: Sanjana -->
 
 ### 3.1 User Interfaces
+- The Online Quiz System shall provide a console-based user interface through which the user can navigate the quiz and view the results. 
+- The main menu shall provide options for starting the quiz, viewing the leaderboard, viewing instructions, and exiting the system. The user shall select an option by entering the corresponding choice. 
+- During the quiz, the system shall display one question at a time along with four answer options identified as A, B, C, and D. The system shall prompt the user to enter the selected answer. 
+- After the quiz is completed, the result screen shall display the user's quiz result, including the score and percentage as applicable. 
+- The system shall use consistent formatting for menus, questions, options, results, and prompts. Invalid user input shall be accompanied by a clear error message prefixed with "Error:" and the user shall be prompted to provide a valid input.
 
 ### 3.2 Software Interfaces
 
 ### 3.3 Communications Interfaces
+- The Online Quiz System shall operate as a standalone offline console application. 
+- No network connection or external communication interface shall be required for the system to perform its core functions. 
+- The system shall not require communication with external servers, web services, or APIs.
 
 ### 3.4 Hardware Interfaces
+- The Online Quiz System shall not require any specialized hardware. 
+- The user shall provide input through a standard keyboard, including menu selections and quiz answers. The system shall display menus, questions, answer options, results, and error messages through the computer's console or terminal display.
+- The system shall operate on standard desktop or laptop hardware capable of running the required C/C++ environment.
 
 ### 3.5 Analysis Models
 
