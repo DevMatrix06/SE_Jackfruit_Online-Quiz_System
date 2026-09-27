@@ -177,9 +177,18 @@ The Main Menu is the entry point of the Online Quiz System. On launch, it presen
 <!-- OWNER: Sanjana -->
 
 #### Description and Priority
-#### Stimulus/Response Sequences
-#### Functional Requirements
+The Quiz Engine shall manage the delivery of multiple-choice questions during a quiz. It shall display one question at a time along with its available answer options, accept the user's selected answer, validate the input, and proceed to the next question until all questions have been presented.
 
+#### Stimulus/Response Sequences
+The user selects the option to start the quiz from the main menu. The system displays the first question along with its answer options. The user enters a selected option. The system validates the selected option and records the answer before displaying the next question. This process continues until all questions in the quiz have been presented.
+
+#### Functional Requirements
+- REQ-QE-1: The system shall load the available multiple-choice questions for the quiz, with each question having exactly one correct answer. (priority: high and verifcation: functional test)
+- REQ-QE-2: The system shall display one question at a time along with its available answer options. (priority: high and verifcation: functional test)
+- REQ-QE-3: The system shall accept the user's selected answer and shall validate that the entered choice corresponds to one of the available answer options. (priority: high and verifcation: functional test)
+- REQ-QE-4: The system shall record the user's selected answer before proceeding to the next question. (priority: high and verifcation: functional test)
+- REQ-QE-5: The system shall proceed to the next question after a valid answer has been recorded. (priority: high and verifcation: functional test)
+- REQ-QE-6: The system shall continue presenting questions until all questions in the quiz have been completed. (priority: high and verifcation: functional test)
 ---
 
 ### 4.3 Scoring & Result Calculation
