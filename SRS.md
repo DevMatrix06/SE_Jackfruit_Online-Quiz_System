@@ -91,6 +91,9 @@ There is no separate administrator role, login system, or web-based interface in
 - The system shall use consistent formatting for menus, questions, options, results, and prompts. Invalid user input shall be accompanied by a clear error message prefixed with "Error:" and the user shall be prompted to provide a valid input.
 
 ### 3.2 Software Interfaces
+- The Online Quiz System shall run as a C/C++ console application using a standard C/C++ compiler and shall operate through a terminal or console window.
+- The question bank shall contain multiple-choice questions, with each question having four answer options and exactly one correct option. The question bank shall be maintained locally by the team and shall not require an external database or web service.
+- The system shall use a local text file named results.txt to store completed quiz results. Each stored record shall contain the player's name and final score. The stored results shall be available for retrieval when the user views the leaderboard.
 
 ### 3.3 Communications Interfaces
 - The Online Quiz System shall operate as a standalone offline console application. 
@@ -103,7 +106,43 @@ There is no separate administrator role, login system, or web-based interface in
 - The system shall operate on standard desktop or laptop hardware capable of running the required C/C++ environment.
 
 ### 3.5 Analysis Models
-
+              ┌─────────┐
+              │  Start  │
+              └────┬────┘
+                   ↓
+          ┌─────────────────┐
+          │   Main Menu     │
+          └────────┬────────┘
+                   ↓
+          ┌─────────────────┐
+          │    Take Quiz    │
+          └────────┬────────┘
+                   ↓
+          ┌─────────────────┐
+          │ Display Question│
+          │   + Options     │
+          └────────┬────────┘
+                   ↓
+          ┌─────────────────┐
+          │ Capture Answer  │
+          └────────┬────────┘
+                   ↓
+             More Questions?
+              /          \
+            Yes           No
+             ↓             ↓
+      Display Next      ┌─────────┐
+       Question         │  Score  │
+             │          └────┬────┘
+             └───→          ↓
+                    ┌────────────────┐
+                    │  Save Result   │
+                    └───────┬────────┘
+                            ↓
+                       ┌──────────┐
+                       │ Menu /   │
+                       │   Exit   │
+                       └──────────┘
 ---
 
 ## 4. System Features
