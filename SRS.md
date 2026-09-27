@@ -8,9 +8,50 @@ Version 1.0
 ---
 
 ## Revision History
-<!-- Sanjana: fill in last, once all sections are merged -->
+
+| Name | Date | Reason For Changes | Version |
+|---|---|---|---|
+| Tejas | Week 1 | Initial SRS skeleton created; Introduction (1.1–1.4) drafted | 0.1 |
+| Vikas | Week 1 | Overall Description (2.1–2.6) added | 0.2 |
+| Sanjana | Week 2 | External Interface Requirements (3.1–3.5) and Quiz Engine feature (4.2) added | 0.3 |
+| Vaishnavi | Week 2 | Result Storage & Leaderboard feature (4.4), Nonfunctional Requirements (5.1–5.6), Appendices A & B added | 0.4 |
+| Team | Week 2 | Consolidated all sections, corrected requirement numbering (REQ-1 to REQ-22), completed Requirement Traceability Matrix | 1.0 |
 
 ## Table of Contents
+
+1. Introduction
+   1.1 Purpose
+   1.2 Intended Audience and Reading Suggestions
+   1.3 Product Scope
+   1.4 References
+2. Overall Description
+   2.1 Product Perspective
+   2.2 Product Functions
+   2.3 User Classes and Characteristics
+   2.4 Operating Environment
+   2.5 Design and Implementation Constraints
+   2.6 Assumptions and Dependencies
+3. External Interface Requirements
+   3.1 User Interfaces
+   3.2 Software Interfaces
+   3.3 Communications Interfaces
+   3.4 Hardware Interfaces
+   3.5 Analysis Models
+4. System Features
+   4.1 Main Menu & Navigation
+   4.2 Quiz Engine (Question Delivery & Answer Capture)
+   4.3 Scoring & Result Calculation
+   4.4 Result Storage & Leaderboard
+5. Other Nonfunctional Requirements
+   5.1 Performance Requirements
+   5.2 Safety Requirements
+   5.3 Security Requirements
+   5.4 Software Quality Attributes
+   5.5 Business Rules
+   5.6 Other Requirements
+Appendix A: Glossary
+Appendix B: Field Layouts
+Appendix C: Requirement Traceability Matrix
 
 ---
 
@@ -84,10 +125,10 @@ There is no separate administrator role, login system, or web-based interface in
 <!-- OWNER: Sanjana -->
 
 ### 3.1 User Interfaces
-- The Online Quiz System shall provide a console-based user interface through which the user can navigate the quiz and view the results. 
-- The main menu shall provide options for starting the quiz, viewing the leaderboard, viewing instructions, and exiting the system. The user shall select an option by entering the corresponding choice. 
-- During the quiz, the system shall display one question at a time along with four answer options identified as A, B, C, and D. The system shall prompt the user to enter the selected answer. 
-- After the quiz is completed, the result screen shall display the user's quiz result, including the score and percentage as applicable. 
+- The Online Quiz System shall provide a console-based user interface through which the user can navigate the quiz and view the results.
+- The main menu shall provide options for starting the quiz, viewing the leaderboard, viewing instructions, and exiting the system. The user shall select an option by entering the corresponding choice.
+- During the quiz, the system shall display one question at a time along with four answer options identified as A, B, C, and D. The system shall prompt the user to enter the selected answer.
+- After the quiz is completed, the result screen shall display the user's quiz result, including the score and percentage as applicable.
 - The system shall use consistent formatting for menus, questions, options, results, and prompts. Invalid user input shall be accompanied by a clear error message prefixed with "Error:" and the user shall be prompted to provide a valid input.
 
 ### 3.2 Software Interfaces
@@ -96,16 +137,18 @@ There is no separate administrator role, login system, or web-based interface in
 - The system shall use a local text file named results.txt to store completed quiz results. Each stored record shall contain the player's name and final score. The stored results shall be available for retrieval when the user views the leaderboard.
 
 ### 3.3 Communications Interfaces
-- The Online Quiz System shall operate as a standalone offline console application. 
-- No network connection or external communication interface shall be required for the system to perform its core functions. 
+- The Online Quiz System shall operate as a standalone offline console application.
+- No network connection or external communication interface shall be required for the system to perform its core functions.
 - The system shall not require communication with external servers, web services, or APIs.
 
 ### 3.4 Hardware Interfaces
-- The Online Quiz System shall not require any specialized hardware. 
+- The Online Quiz System shall not require any specialized hardware.
 - The user shall provide input through a standard keyboard, including menu selections and quiz answers. The system shall display menus, questions, answer options, results, and error messages through the computer's console or terminal display.
 - The system shall operate on standard desktop or laptop hardware capable of running the required C/C++ environment.
 
 ### 3.5 Analysis Models
+
+```
               ┌─────────┐
               │  Start  │
               └────┬────┘
@@ -143,6 +186,8 @@ There is no separate administrator role, login system, or web-based interface in
                        │ Menu /   │
                        │   Exit   │
                        └──────────┘
+```
+
 ---
 
 ## 4. System Features
@@ -177,18 +222,26 @@ The Main Menu is the entry point of the Online Quiz System. On launch, it presen
 <!-- OWNER: Sanjana -->
 
 #### Description and Priority
-The Quiz Engine shall manage the delivery of multiple-choice questions during a quiz. It shall display one question at a time along with its available answer options, accept the user's selected answer, validate the input, and proceed to the next question until all questions have been presented.
+The Quiz Engine shall manage the delivery of multiple-choice questions during a quiz. It shall display one question at a time along with its available answer options, accept the user's selected answer, validate the input, and proceed to the next question until all questions have been presented. **Priority: High.** Owned by Sanjana.
 
 #### Stimulus/Response Sequences
-The user selects the option to start the quiz from the main menu. The system displays the first question along with its answer options. The user enters a selected option. The system validates the selected option and records the answer before displaying the next question. This process continues until all questions in the quiz have been presented.
+- The user selects the option to start the quiz from the main menu.
+- The system displays the first question along with its answer options.
+- The user enters a selected option.
+- The system validates the selected option and records the answer before displaying the next question.
+- This process continues until all questions in the quiz have been presented.
 
 #### Functional Requirements
-- REQ-QE-1: The system shall load the available multiple-choice questions for the quiz, with each question having exactly one correct answer. (priority: high and verification: functional test)
-- REQ-QE-2: The system shall display one question at a time along with its available answer options. (priority: high and verification: functional test)
-- REQ-QE-3: The system shall accept the user's selected answer and shall validate that the entered choice corresponds to one of the available answer options. (priority: high and verification: functional test)
-- REQ-QE-4: The system shall record the user's selected answer before proceeding to the next question. (priority: high and verification: functional test)
-- REQ-QE-5: The system shall proceed to the next question after a valid answer has been recorded. (priority: high and verification: functional test)
-- REQ-QE-6: The system shall continue presenting questions until all questions in the quiz have been completed. (priority: high and verification: functional test)
+
+| ID | Requirement | Priority | Verification |
+|----|-------------|----------|---------------|
+| REQ-17 | The system shall load the available multiple-choice questions for the quiz, with each question having exactly one correct answer. | High | Functional test |
+| REQ-18 | The system shall display one question at a time along with its available answer options. | High | Functional test |
+| REQ-19 | The system shall accept the user's selected answer and validate that the entered choice corresponds to one of the available answer options. | High | Functional test |
+| REQ-20 | The system shall record the user's selected answer before proceeding to the next question. | High | Functional test |
+| REQ-21 | The system shall proceed to the next question after a valid answer has been recorded. | High | Functional test |
+| REQ-22 | The system shall continue presenting questions until all questions in the quiz have been completed. | High | Functional test |
+
 ---
 
 ### 4.3 Scoring & Result Calculation
@@ -213,7 +266,7 @@ This feature tracks the user's correct and incorrect answers as the quiz progres
 | REQ-9 | The system shall calculate the total score and percentage once all questions in the quiz have been answered. | High | Functional test |
 | REQ-10 | The system shall classify the overall result (e.g. Pass/Fail, or a grade band) based on a defined percentage threshold. | Medium | Functional test |
 | REQ-11 | The system shall display the final score, percentage, and correct/incorrect counts to the user immediately after the quiz ends. | High | Functional test |
-| REQ-12 | The system shall pass the completed result (score, percentage, timestamp) to the Result Storage & Leaderboard feature for persistence. | Medium | Integration test |
+| REQ-12 | The system shall pass the completed result (score and percentage) to the Result Storage & Leaderboard feature for persistence. | Medium | Integration test |
 
 ---
 
@@ -221,13 +274,9 @@ This feature tracks the user's correct and incorrect answers as the quiz progres
 <!-- OWNER: Vaishnavi -->
 
 #### Description and Priority
-
-The Result Storage & Leaderboard feature stores the player's name and final score after a quiz attempt. The system saves the result to a persistent file so that previously completed quiz attempts can be retrieved later. The stored results can be displayed as a leaderboard, with entries arranged from the highest score to the lowest score.
-
-Priority: Medium
+The Result Storage & Leaderboard feature stores the player's name and final score after a quiz attempt. The system saves the result to a persistent file so that previously completed quiz attempts can be retrieved later. The stored results can be displayed as a leaderboard, with entries arranged from the highest score to the lowest score. **Priority: Medium.** Owned by Vaishnavi.
 
 #### Stimulus/Response Sequences
-
 1. The user completes the quiz.
 2. The system calculates the final score.
 3. The system saves the player's name and final score to the results file.
@@ -239,55 +288,46 @@ Priority: Medium
 
 #### Functional Requirements
 
-- **REQ-13:** The system shall save the player's name and final score to a persistent file after each quiz attempt.
-- **REQ-14:** The system shall be able to read previously stored results from the results file.
-- **REQ-15:** The system shall display stored results as a leaderboard, sorted by score in descending order.
-- **REQ-16:** The system shall handle the case where no results file exists yet without crashing.
+| ID | Requirement | Priority | Verification |
+|----|-------------|----------|---------------|
+| REQ-13 | The system shall save the player's name and final score to a persistent file after each quiz attempt. | High | Functional test |
+| REQ-14 | The system shall be able to read previously stored results from the results file. | High | Functional test |
+| REQ-15 | The system shall display stored results as a leaderboard, sorted by score in descending order. | Medium | Functional test |
+| REQ-16 | The system shall handle the case where no results file exists yet without crashing. | Medium | Negative test |
+
 ---
 
 ## 5. Other Nonfunctional Requirements
 <!-- OWNER: Vaishnavi -->
 
 ### 5.1 Performance Requirements
-
-The system shall display questions, menu options, and results without perceptible delay. User input shall be processed within one second under normal operating conditions on a standard computer.
-
-The leaderboard shall be generated without significant delay for the expected number of stored quiz results.
+The system shall display questions, menu options, and results without perceptible delay. User input shall be processed within one second under normal operating conditions on a standard computer. The leaderboard shall be generated without significant delay for the expected number of stored quiz results.
 
 ### 5.2 Safety Requirements
-
 Not applicable. The Online Quiz System is a non-safety-critical console application and does not control physical devices or processes that could cause safety hazards.
 
 ### 5.3 Security Requirements
-
-The system does not require user authentication or login functionality. It is intended for single-user, local use.
-
-The system shall avoid exposing unnecessary system or file information to the user during normal operation. If a result file cannot be accessed, the system shall display an appropriate error message rather than terminating unexpectedly.
+The system does not require user authentication or login functionality. It is intended for single-user, local use. The system shall avoid exposing unnecessary system or file information to the user during normal operation. If a result file cannot be accessed, the system shall display an appropriate error message rather than terminating unexpectedly.
 
 ### 5.4 Software Quality Attributes
 
-Usability
-
+**Usability**
 The system shall provide clear menu options, prompts, and error messages so that a first-time user with basic computer knowledge can operate the quiz without difficulty.
 
-Reliability
-
+**Reliability**
 The system shall handle invalid user input and missing result files without crashing. The system shall continue operation or return to the appropriate menu whenever an input or file-related error can be handled.
 
-Maintainability
-
+**Maintainability**
 The system shall be structured so that the question bank, result storage, and leaderboard functionality can be modified or extended without requiring major changes to unrelated system features.
 
 ### 5.5 Business Rules
-
-BR-1: Only one quiz attempt shall be scored at a time.
-BR-2: Each multiple-choice question shall have exactly one correct answer.
-BR-3: Every completed quiz attempt shall produce a final score.
-BR-4: Each stored result shall contain the player's name and final score.
-BR-5: Leaderboard entries shall be displayed in descending order of score.
+- **BR-1:** Only one quiz attempt shall be scored at a time.
+- **BR-2:** Each multiple-choice question shall have exactly one correct answer.
+- **BR-3:** Every completed quiz attempt shall produce a final score.
+- **BR-4:** Each stored result shall contain the player's name and final score.
+- **BR-5:** Leaderboard entries shall be displayed in descending order of score.
 
 ### 5.6 Other Requirements
-
 Not applicable. No additional requirements have been identified beyond those specified in the preceding sections.
 
 ---
@@ -295,34 +335,26 @@ Not applicable. No additional requirements have been identified beyond those spe
 ## Appendix A: Glossary
 <!-- OWNER: Vikas -->
 
-**MCQ:**  
-Multiple-Choice Question. A question that provides multiple answer options, with one correct option.
+**MCQ:** Multiple-Choice Question. A question that provides multiple answer options, with one correct option.
 
-**REQ:**  
-A unique identifier assigned to a functional requirement in the Software Requirements Specification.
+**REQ:** A unique identifier assigned to a functional requirement in the Software Requirements Specification.
 
-**Question Bank:**  
-The collection of multiple-choice questions available for the quiz.
+**Question Bank:** The collection of multiple-choice questions available for the quiz.
 
-**Quiz Engine:**  
-The system feature responsible for presenting questions, accepting answers, and progressing through the quiz.
+**Quiz Engine:** The system feature responsible for presenting questions, accepting answers, and progressing through the quiz.
 
-**Score:**  
-The number of questions answered correctly by the player.
+**Score:** The number of questions answered correctly by the player.
 
-**Result:**  
-The final outcome of a completed quiz attempt, including the player's score.
+**Result:** The final outcome of a completed quiz attempt, including the player's score.
 
-**Leaderboard:**  
-A list of stored quiz results arranged according to the players' scores.
+**Leaderboard:** A list of stored quiz results arranged according to the players' scores.
 
-**Persistent File:**  
-A file used to store information so that it remains available after the program terminates.
- 
+**Persistent File:** A file used to store information so that it remains available after the program terminates.
+
 ## Appendix B: Field Layouts
 <!-- OWNER: Vaishnavi -->
 
-Result File
+**Result File**
 
 The system shall use a persistent text file named results.txt to store completed quiz results.
 
@@ -333,13 +365,40 @@ Each record shall contain:
 | Player Name | Name entered by the player |
 | Score | Final score obtained in the quiz |
 
-Example
+Example:
+```
 Vaishnavi,8
 Tejas,9
 Sanjana,7
 Vikas,10
+```
 
 Each line represents one completed quiz attempt.
 
 ## Appendix C: Requirement Traceability Matrix
 <!-- OWNER: Sanjana -->
+
+| Sl. No. | Requirement ID | Brief Description | Section | Owner |
+|---|---|---|---|---|
+| 1 | REQ-1 | Display numbered main menu on program start | 4.1 | Tejas |
+| 2 | REQ-2 | Validate menu input as a listed option | 4.1 | Tejas |
+| 3 | REQ-3 | Re-prompt on invalid menu input | 4.1 | Tejas |
+| 4 | REQ-4 | Navigate to correct feature based on menu input | 4.1 | Tejas |
+| 5 | REQ-5 | Return to main menu after a feature finishes | 4.1 | Tejas |
+| 6 | REQ-6 | Terminate cleanly on exit | 4.1 | Tejas |
+| 7 | REQ-7 | Compare submitted answer to correct option, update score | 4.3 | Vikas |
+| 8 | REQ-8 | Track correct/incorrect answer counts | 4.3 | Vikas |
+| 9 | REQ-9 | Calculate total score and percentage | 4.3 | Vikas |
+| 10 | REQ-10 | Classify result (Pass/Fail or grade band) | 4.3 | Vikas |
+| 11 | REQ-11 | Display final score, percentage, and counts | 4.3 | Vikas |
+| 12 | REQ-12 | Pass completed result to Result Storage feature | 4.3 | Vikas |
+| 13 | REQ-13 | Save player name and score to persistent file | 4.4 | Vaishnavi |
+| 14 | REQ-14 | Read previously stored results from file | 4.4 | Vaishnavi |
+| 15 | REQ-15 | Display leaderboard sorted by score (descending) | 4.4 | Vaishnavi |
+| 16 | REQ-16 | Handle missing results file without crashing | 4.4 | Vaishnavi |
+| 17 | REQ-17 | Load multiple-choice questions with one correct answer each | 4.2 | Sanjana |
+| 18 | REQ-18 | Display one question with options at a time | 4.2 | Sanjana |
+| 19 | REQ-19 | Accept and validate the user's selected answer | 4.2 | Sanjana |
+| 20 | REQ-20 | Record the user's answer before proceeding | 4.2 | Sanjana |
+| 21 | REQ-21 | Proceed to the next question after a valid answer | 4.2 | Sanjana |
+| 22 | REQ-22 | Continue presenting questions until the quiz is complete | 4.2 | Sanjana |
