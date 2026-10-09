@@ -140,5 +140,8 @@ int main(void)
         }
     } while (choice != MENU_EXIT && choice != MENU_EOF);
 
+    /* Clean exit (REQ-6): main.c keeps no files open (each feature opens and
+     * closes its own), so just say goodbye and return from main. */
+    printf("\nThank you for playing. Goodbye!\n");
     return 0;
 }
