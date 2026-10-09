@@ -7,6 +7,7 @@
 
 #define MENU_MIN 1
 #define MENU_MAX 4
+#define MENU_EOF (-2)       /* returned when input ends (Ctrl+D / Ctrl+Z) */
 
 /* Print the numbered main menu (REQ-1). */
 static void show_menu(void)
@@ -19,7 +20,8 @@ static void show_menu(void)
 }
 
 /* Read one line and accept it only if it is a single integer that is a
- * listed menu option (REQ-2). Returns the option, or -1 if invalid. */
+ * listed menu option (REQ-2). Returns the option, -1 if invalid, or
+ * MENU_EOF if there is no more input. */
 static int read_menu_choice(void)
 {
     char line[64];
@@ -28,7 +30,7 @@ static int read_menu_choice(void)
 
     printf("Enter your choice (%d-%d): ", MENU_MIN, MENU_MAX);
     if (fgets(line, sizeof line, stdin) == NULL)
-        return -1;
+        return MENU_EOF;
 
     if (strchr(line, '\n') == NULL && !feof(stdin)) {   /* line too long */
         int c;
@@ -53,11 +55,18 @@ int main(void)
 {
     int choice;
 
-    show_menu();
-    choice = read_menu_choice();
-    if (choice == -1)
-        printf("Invalid input.\n");
-    else
+    /* Keep asking until the input is valid; never exit on bad input (REQ-3). */
+    do {
+        show_menu();
+        choice = read_menu_choice();
+        if (choice == MENU_EOF)
+            break;                          /* stdin closed: nothing more to read */
+        if (choice == -1)
+            printf("Error: please enter a number from %d to %d.\n",
+                   MENU_MIN, MENU_MAX);
+    } while (choice == -1);
+
+    if (choice != MENU_EOF)
         printf("You selected option %d.\n", choice);
     return 0;
 }
