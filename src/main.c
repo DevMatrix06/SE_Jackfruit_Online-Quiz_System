@@ -7,7 +7,8 @@
 
 #define MENU_MIN 1
 #define MENU_MAX 4
-#define MENU_EOF (-2)       /* returned when input ends (Ctrl+D / Ctrl+Z) */
+#define MENU_EXIT 4
+#define MENU_EOF (-2)      /* returned when input ends (Ctrl+D / Ctrl+Z) */
 
 #define QUESTIONS_FILE  "data/questions.txt"
 #define MAX_QUESTIONS   100
@@ -118,23 +119,26 @@ int main(void)
 {
     int choice;
 
-    /* Keep asking until the input is valid; never exit on bad input (REQ-3). */
+    /* Show the menu again after every feature until Exit (REQ-5). */
     do {
         show_menu();
         choice = read_menu_choice();
-        if (choice == MENU_EOF)
-            break;                          /* stdin closed: nothing more to read */
-        if (choice == -1)
+
+        /* Invalid input only prints an error and loops (REQ-3). */
+        if (choice == -1) {
             printf("Error: please enter a number from %d to %d.\n",
                    MENU_MIN, MENU_MAX);
-    } while (choice == -1);
+            continue;
+        }
 
-    /* Route to the selected feature (REQ-4). */
-    switch (choice) {
-    case 1: start_quiz();       break;
-    case 2: show_leaderboard(); break;
-    case 3: show_instructions(); break;
-    default:                    break;      /* 4 = exit, or no more input */
-    }
+        /* Route to the selected feature (REQ-4). */
+        switch (choice) {
+        case 1: start_quiz();        break;
+        case 2: show_leaderboard();  break;
+        case 3: show_instructions(); break;
+        default:                     break;     /* 4 = exit */
+        }
+    } while (choice != MENU_EXIT && choice != MENU_EOF);
+
     return 0;
 }
