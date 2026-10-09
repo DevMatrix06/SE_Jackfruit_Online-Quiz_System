@@ -1,0 +1,30 @@
+Which keyword defines a constant in C?
+const
+final
+static
+fixed
+A
+Which function reads a line of text safely?
+gets
+fgets
+scanf
+getch
+B
+What is the size of int on most 32-bit systems?
+1 byte
+2 bytes
+4 bytes
+8 bytes
+C
+Which header declares printf?
+stdlib.h
+string.h
+math.h
+stdio.h
+D
+Which operator gives the remainder of a division?
+%
+/
+*
+&
+A
