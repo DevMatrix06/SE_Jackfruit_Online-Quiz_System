@@ -40,7 +40,7 @@ static int read_menu_choice(void)
     value = strtol(line, &end, 10);
     if (end == line)                        /* no digits at all */
         return -1;
-    while (*end == ' ' || *end == '\t')     /* allow trailing spaces */
+    while (*end == ' ' || *end == '\t' || *end == '\r')  /* trailing blanks */
         end++;
     if (*end != '\n' && *end != '\0')       /* extra characters */
         return -1;
