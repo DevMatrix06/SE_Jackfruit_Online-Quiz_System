@@ -1,5 +1,5 @@
 CC     = gcc
-CFLAGS = -Wall -std=c99 -Iinclude
+CFLAGS = -Wall -std=c99 -Iinclude -MMD -MP
 SRC    = $(wildcard src/*.c)
 OBJ    = $(SRC:.c=.o)
 
@@ -10,6 +10,8 @@ src/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f src/*.o quiz quiz.exe
+	rm -f src/*.o src/*.d quiz quiz.exe
 
 .PHONY: clean
+
+-include $(OBJ:.o=.d)
