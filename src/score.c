@@ -3,6 +3,8 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#define PASS_PERCENT 40.0
+
 Result calculate_result(const Question qs[], const char answers[], int n)
 {
     Result r = {0, 0, 0, 0, 0.0, 0};
@@ -23,7 +25,7 @@ Result calculate_result(const Question qs[], const char answers[], int n)
     }
 
     r.percent = (double)r.score / r.total * 100.0;
-    r.passed = (r.percent >= 40.0) ? 1 : 0;
+    r.passed = (r.percent >= PASS_PERCENT) ? 1 : 0;
 
     return r;
 }
@@ -42,3 +44,4 @@ void show_result(const Result *r)
     printf("Incorrect answers: %d\n", r->incorrect);
     printf("Result: %s\n", r->passed ? "Pass" : "Fail");
 }
+
