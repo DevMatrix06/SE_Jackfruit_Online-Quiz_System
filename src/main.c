@@ -92,6 +92,7 @@ static void start_quiz(void)
     if (name[0] == '\0')
         strcpy(name, "Player");
 
+    memset(answers, 0, sizeof answers);   /* unanswered stays 0 if the quiz ends early */
     n = load_questions(QUESTIONS_FILE, qs, MAX_QUESTIONS);
     if (n <= 0) {
         printf("Error: could not load any questions.\n");

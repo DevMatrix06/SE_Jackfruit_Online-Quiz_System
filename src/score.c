@@ -1,23 +1,17 @@
-#include <stdio.h>
-#include <stddef.h>
 #include "score.h"
 
-/*
- * Calculate total score and percentage for completed quiz.
- * REQ-7: Compares each answer to the correct option and updates the score.
- * REQ-8: Counts correct and incorrect answers.
- * REQ-9: Calculates total score and percentage after questions are answered.
- * REQ-10: Classifies pass/fail based on a 40% threshold.
- */
+#include <stddef.h>
+#include <stdio.h>
+
+#define PASS_PERCENT 40.0
+
 Result calculate_result(const Question qs[], const char answers[], int n)
 {
     Result r = {0, 0, 0, 0, 0.0, 0};
     int i;
 
-    /* Validate inputs to prevent crashes on null pointers or non-positive count */
-    if (qs == NULL || answers == NULL || n <= 0) {
+    if (qs == NULL || answers == NULL || n <= 0)
         return r;
-    }
 
     r.total = n;
 
@@ -30,22 +24,12 @@ Result calculate_result(const Question qs[], const char answers[], int n)
         }
     }
 
-    /* REQ-9: Percentage = (score / total) * 100 */
-    if (r.total > 0) {
-        r.percent = ((double)r.score / (double)r.total) * 100.0;
-    }
-
-    /* Pass threshold: 40% per SRS 4.3 */
-    r.passed = (r.percent >= 40.0) ? 1 : 0;
+    r.percent = (double)r.score / r.total * 100.0;
+    r.passed = (r.percent >= PASS_PERCENT) ? 1 : 0;
 
     return r;
 }
 
-/*
- * Display the final score, percentage, and correct/incorrect counts (REQ-11).
- * Shows the result summary to the user immediately after the quiz ends.
- * Handles NULL safely to avoid crashing.
- */
 void show_result(const Result *r)
 {
     if (r == NULL) {
@@ -60,3 +44,4 @@ void show_result(const Result *r)
     printf("Incorrect answers: %d\n", r->incorrect);
     printf("Result: %s\n", r->passed ? "Pass" : "Fail");
 }
+
