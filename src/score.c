@@ -1,15 +1,59 @@
 #include "score.h"
+#include <stddef.h>
+#include <stdio.h>
 
-Result calculate_result(const Question qs[], const char answers[], int n)
-{
-    Result r = {0, 0, 0, 0, 0.0, 0};
-    (void)qs;
-    (void)answers;
-    (void)n;
+/*
+ * Calculate total score and percentage for completed quiz.
+ * REQ-7: Compares each answer to the correct option and updates the score.
+ * REQ-8: Counts correct and incorrect answers.
+ * REQ-9: Calculates total score and percentage (score / total * 100)
+ *        after all questions have been answered.
+ */
+Result calculate_result(const Question qs[], const char answers[], int n) {
+  Result r = {0, 0, 0, 0, 0.0, 0};
+  int i;
+
+  /* Validate inputs to prevent crashes on null pointers or invalid counts */
+  if (qs == NULL || answers == NULL || n <= 0) {
     return r;
+  }
+
+  r.total = n;
+
+  for (i = 0; i < n; i++) {
+    if (answers[i] == qs[i].correct) {
+      r.score++;
+      r.correct++;
+    } else {
+      r.incorrect++;
+    }
+  }
+
+  /* REQ-9: Percentage = score / total * 100 computed after the last question */
+  if (r.total > 0) {
+    r.percent = ((double)r.score / (double)r.total) * 100.0;
+  }
+
+  /* Pass threshold: 40% per SRS 4.3 */
+  r.passed = (r.percent >= 40.0) ? 1 : 0;
+
+  return r;
 }
 
-void show_result(const Result *r)
-{
-    (void)r;
+/*
+ * Display the quiz results summary to the user.
+ * Validates the pointer to prevent null pointer dereferences.
+ */
+void show_result(const Result *r) {
+  if (r == NULL) {
+    printf("Error: result is unavailable.\n");
+    return;
+  }
+
+  printf("\n===== Quiz Results =====\n");
+  printf("Score: %d/%d\n", r->score, r->total);
+  printf("Percentage: %.2f%%\n", r->percent);
+  printf("Correct answers: %d\n", r->correct);
+  printf("Incorrect answers: %d\n", r->incorrect);
+  printf("Result: %s\n", r->passed ? "Pass" : "Fail");
 }
