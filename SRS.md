@@ -85,7 +85,7 @@ The Online Quiz System is a small, offline, console-based quiz program. A user a
 <!-- OWNER: Vikas -->
 
 ### 2.1 Product Perspective
-The Online Quiz System is a new, standalone console application. It is not an upgrade of an existing system and is not part of a larger product. It runs on a single machine as one C/C++ program, with no client-server split, no backend and no database. The flow is: User ↔ Console Program ↔ (optional) local question and result files. It is a mini-project for the Software Engineering course, so it is a small, offline, single-user tool.
+The Online Quiz System is a new, standalone console application. It is not an upgrade of an existing system and is not part of a larger product. It runs on a single machine as one C/C++ program, with no client-server split, no backend and no database. The flow is: User ↔ Console Program ↔ (optional) local question and result files. 
 
 ### 2.2 Product Functions
 At a high level, the system shall:
