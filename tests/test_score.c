@@ -112,6 +112,8 @@ int main(void) {
   assert(r8.total == 0 && r8.score == 0 && r8.passed == 0);
   r8 = calculate_result(qs10, answers10, 0);
   assert(r8.total == 0 && r8.score == 0 && r8.passed == 0);
+  r8 = calculate_result(qs10, NULL, 10);
+  assert(r8.total == 0 && r8.score == 0 && r8.passed == 0);
   printf("--> Test 8 Passed!\n\n");
 
   printf("=========================================\n");

@@ -10,13 +10,13 @@
 
 ## 1. Introduction
 
-**Purpose.** This document defines how the Online Quiz System is tested: what is tested, how, with what, when and by whom. It also links every test case to the SRS requirement it verifies.
+**Purpose.** This document says how the Online Quiz System is tested: what is tested, how, with what, when and by whom. It also links every test case to the SRS requirement it checks.
 
-**Scope.** All functional requirements REQ-1 to REQ-22 and all non-functional requirements NFR-1 to NFR-5, including the security requirements SEC-1 to SEC-6 of SRS v1.1. Testing is done on the compiled console program and on individual C modules.
+**Scope.** All functional requirements REQ-1 to REQ-22 and all non-functional requirements NFR-1 to NFR-5, including the security requirements SEC-1 to SEC-6 of SRS v1.2. Testing is done on the compiled program and on single C modules.
 
 **References.**
-- Online Quiz System SRS v1.1 (`SRS.md`)
-- Software Architecture and Design Specification v1.0 (`docs/SAD.md`)
+- Online Quiz System SRS v1.2 (`SRS.md`)
+- Software Architecture and Design Specification v1.1 (`docs/SAD.md`)
 - Mini-project deliverables, Part-1 and Part-2
 
 **Definitions.**
@@ -80,9 +80,9 @@
 | User authentication, accounts, roles | Out of scope in the SRS (single local user) |
 | Network, web, database, GUI | Not part of the product |
 | Concurrent or multi-user use | SRS constraint: single user, single session |
-| C standard library and operating-system behaviour | Assumed correct; not part of this project |
-| Leaderboards with more than 100 stored results | Beyond the expected load in NFR-1 |
-| Localisation, accessibility tooling | Not required for this version |
+| C standard library and operating system | Assumed to work correctly; not part of this project |
+| Leaderboards with more than 100 stored results | More than NFR-1 expects |
+| Other languages, screen-reader support | Not needed in this version |
 
 ---
 
@@ -92,40 +92,40 @@
 
 | Level | What | How |
 |---|---|---|
-| Unit | One module in isolation (scoring, storage functions) | Small C programs with `assert`, e.g. `tests/test_score.c`, run by `make test` |
-| Integration | Menu Controller with the other modules (REQ-12, quiz to score to storage) | Run the real program with scripted input |
-| System | The whole program against the SRS | Manual and scripted runs through the console |
+| Unit | One module on its own (scoring, storage functions) | Small C programs using `assert`, e.g. `tests/test_score.c`, run with `make test` |
+| Integration | Menu Controller working with the other modules (REQ-12: quiz, then score, then storage) | Run the real program with input sent from a script |
+| System | The whole program checked against the SRS | Manual runs and scripted runs in the console |
 | Acceptance | Demo videos (Sprint-1 1 min, Sprint-2 2 min) and instructor review | Walk-through of the working product |
 
-**Types.** Functional, negative/robustness, performance (timing), usability (inspection and walkthrough), security (5.1), regression (re-run all executed cases after each merge).
+**Types.** Functional, negative (wrong input and file errors), performance (timing), usability (inspection and walk-through), security (5.1), and regression (run the earlier tests again after each merge).
 
-**Technique.** Scripted input is piped into the program (`printf '1\nAsha\n...' | ./quiz`) so runs are repeatable. Expected output is checked against the SRS wording.
+**Method.** Input is sent to the program from a script (`printf '1\nAsha\n...' | ./quiz`), so every run is the same. The output is compared with what the SRS says.
 
 **Entry criteria**
 - The code builds with `gcc -Wall -std=c99` without warnings.
 - The GitHub Actions build is green for the commit under test.
-- Test data (`data/questions.txt`, seeded `results.txt`) is available.
+- Test data (`data/questions.txt`, and a `results.txt` filled with sample data) is available.
 
 **Exit criteria**
 - 100% of planned test cases executed.
-- Every test case is Pass, or each Fail has a recorded defect with an owner and a decision.
+- Every test case passes, or each failure has a recorded defect with an owner and a decision.
 - No open critical defect (crash, data loss, wrong score).
 - All Sprint-1 and Sprint-2 requirements are covered by at least one passing test.
 
 ### 5.1 Security Validation
 
-Security testing targets the six security requirements of SRS Section 5.3.2. The product has no network or authentication surface, so checks focus on input handling, file handling and information disclosure.
+Security testing covers the six security requirements in SRS Section 5.3.2. The program has no network and no login, so the checks focus on input handling, file handling and not showing system details.
 
-| Check | Technique | Requirement | Test case |
+| Check | Method | Requirement | Test case |
 |---|---|---|---|
-| Error text exposes no paths, OS codes or addresses | Force each error (missing question file, unwritable results file) and read the output | SEC-1 | TC-16 |
-| Player name cannot corrupt or forge a record | Save names containing `,`, CR and LF; inspect `results.txt` | SEC-2 | TC-09 |
-| Oversized and malformed input does not overflow or crash | Fuzz-style input: 5000-character line, empty line, non-numeric, trailing text, binary-like bytes | SEC-3 | TC-03, TC-17 |
-| File failures do not crash the program | Make the results file unopenable (directory with the same name), remove it, leave it empty | SEC-4 | TC-14, TC-16 |
-| File names cannot be chosen by the user | Code review: every `fopen` uses a compile-time constant | SEC-5 | TC-18 |
-| End of input handled | Close stdin at the menu and at the name prompt | SEC-6 | TC-05 |
-| Banned or risky C functions absent | `grep` for `gets`, `scanf`, `sprintf`, unbounded `strcpy`; compile with `-Wall` | SEC-3 | TC-18 |
-| Memory-safety defects | Re-run the whole suite once with `-fsanitize=address,undefined` before code freeze | SEC-3 | Sprint-2 regression run |
+| Error text shows no paths, system codes or addresses | Cause each error (missing question file, results file that cannot be written) and read the output | SEC-1 | TC-16 |
+| A player name cannot damage or fake a record | Save names containing `,`, CR and LF; look at `results.txt` | SEC-2 | TC-09 |
+| Very long and wrong input does not overflow or crash | Odd input: a 5000-character line, an empty line, letters instead of a number, extra text after a number | SEC-3 | TC-03, TC-17 |
+| File problems do not crash the program | Make the results file impossible to open (a folder with the same name), remove it, leave it empty | SEC-4 | TC-14, TC-16 |
+| File names cannot be chosen by the user | Code review: every `fopen` uses a name fixed in the code | SEC-5 | TC-18 |
+| End of input is handled | End the input at the menu and at the name prompt | SEC-6 | TC-05 |
+| Risky C functions are not used | Search the code (`grep`) for `gets`, `scanf`, `sprintf` and `strcpy` without a limit; compile with `-Wall` | SEC-3 | TC-18 |
+| Memory errors | Run all the tests once more with `-fsanitize=address,undefined` before the code freeze | SEC-3 | Sprint-2 regression run |
 
 ---
 
@@ -136,9 +136,9 @@ Security testing targets the six security requirements of SRS Section 5.3.2. The
 | Hardware | Standard Windows laptop or desktop; no special devices |
 | Operating systems | Windows 11 (MinGW GCC, Git Bash / PowerShell); Ubuntu (GitHub Actions) |
 | Compiler / build | GCC with `-Wall -std=c99`, GNU Make |
-| Tools | Git, GitHub Actions, shell pipes for scripted input, `time` for timing, GitHub issues for defects |
-| Test data | `data/questions.txt` (5 questions); seeded `results.txt` files created per test; a directory named `results.txt` for the write-failure case |
-| Run directory | Repository root (file paths in the program are relative) |
+| Tools | Git, GitHub Actions, shell scripts to send input, `time` to measure speed, GitHub issues to track defects |
+| Test data | `data/questions.txt` (5 questions); `results.txt` files filled with sample data for each test; a folder named `results.txt` for the write-failure case |
+| Run directory | Repository root (the file paths in the program are relative) |
 
 ---
 
@@ -151,7 +151,7 @@ Security testing targets the six security requirements of SRS Section 5.3.2. The
 | Menu and negative tests executed | 12-Oct-2026 | Results in Section 13 |
 | Sprint-1 integration run (menu, quiz, score, save) | 19 to 23 Oct 2026 | After Quiz Engine pull requests merge |
 | Sprint-1 demo video | 23-Oct-2026 | Issue DEMO-1 |
-| Full execution of all cases (TEST-1), regression with sanitizers | 26 to 30 Oct 2026 | Sprint-2 |
+| Run all test cases (TEST-1), and run the earlier tests again with memory checks | 26 to 30 Oct 2026 | Sprint-2 |
 | Code freeze and final report | 30-Oct-2026 | Issue DEMO-2 |
 
 ---
@@ -182,19 +182,19 @@ Security testing targets the six security requirements of SRS Section 5.3.2. The
 
 | Risk | Mitigation |
 |---|---|
-| Quiz Engine delivered late, blocking end-to-end tests | Test scoring and storage on their own; run end-to-end cases as soon as the engine merges |
-| Leaderboard (Sprint-2) leaves little time to test | Test cases are written now and the seeded data is prepared in advance |
+| Quiz Engine is late, so tests of the whole quiz are blocked | Test scoring and storage on their own; run the whole-quiz tests as soon as the engine is merged |
+| Leaderboard (Sprint-2) leaves little time to test | Test cases are written now and the sample data is prepared in advance |
 | Tests depend on the working directory | Always run from the repository root |
-| Windows and Linux line endings differ in `results.txt` | Include a CRLF seeded file in the leaderboard tests |
-| Manual tests are skipped under time pressure | Scripted input and `make test` keep the common checks one command away |
+| Windows and Linux end lines differently in `results.txt` | Include a file with Windows (CRLF) line endings in the leaderboard tests |
+| Manual tests are skipped when time is short | Scripts and `make test` keep the common checks to one command |
 
 ---
 
 ## 11. Assumptions and Dependencies
 
-- The Quiz Engine implements the function signatures in `quiz.h` exactly.
+- The Quiz Engine uses the function names and arguments in `quiz.h` exactly.
 - The question file follows the layout in SAD Section 3.6.
-- `results.txt` is created by the program; tests start from a known state by deleting or seeding it.
+- `results.txt` is created by the program; tests start from a known state by deleting it or filling it with sample data.
 - GitHub Actions and a local GCC are available throughout the testing period.
 
 ---
@@ -210,7 +210,7 @@ Security testing targets the six security requirements of SRS Section 5.3.2. The
 
 ### 13.1 Test Cases
 
-Result key: **Pass** and **Fail** are recorded results; **Blocked** needs unmerged code; **Not run** is scheduled for a later sprint. Executed on 12-Oct-2026 against `main` at commit `2da664a`, with the 8 scoring unit tests from `tests/test_score.c`.
+Result key: **Pass** and **Fail** are recorded results; **Blocked** needs code that is not merged yet; **Not run** is planned for a later sprint. Run on 12-Oct-2026 on `main` at commit `2da664a`, together with the 8 scoring unit tests in `tests/test_score.c`.
 
 | TC | Requirement | Type | Steps | Expected result | Result |
 |---|---|---|---|---|---|
@@ -226,10 +226,10 @@ Result key: **Pass** and **Fail** are recorded results; **Blocked** needs unmerg
 | TC-10 | REQ-12 | Integration | Complete a quiz as `Asha` | One new line `Asha,<score>` is appended to `results.txt` | **Blocked** (Quiz Engine) |
 | TC-11 | REQ-17 to REQ-22 | System | Start quiz, answer every question | Questions appear one at a time with options A to D; each answer is recorded; the quiz ends after the last question and shows the result | **Blocked** (Quiz Engine) |
 | TC-12 | REQ-19 | Negative | During a question enter `E`, an empty line, `1`, then `B` | Each invalid entry gives an `Error:` line and the same question again; `B` is accepted | **Blocked** (Quiz Engine) |
-| TC-13 | REQ-14, REQ-15 | Functional | Seed `results.txt` with `Vikas,10`, `Vaishnavi,8`, `Tejas,9`; choose View Leaderboard | Order shown is 10, 9, 8 | **Not run** (Sprint-2) |
+| TC-13 | REQ-14, REQ-15 | Functional | Fill `results.txt` with `Vikas,10`, `Vaishnavi,8`, `Tejas,9`; choose View Leaderboard | Order shown is 10, 9, 8 | **Not run** (Sprint-2) |
 | TC-14 | REQ-16, SEC-4 | Negative | Delete `results.txt`; choose View Leaderboard | A short "no results yet" message and return to the menu; no crash | **Fail** (known): no crash, but the leaderboard is still a stub and prints nothing; due in Sprint-2 |
 | TC-15 | NFR-1 | Performance | Time a full scripted run: menu, start quiz, name, exit | Each response within 1 second | **Pass** (whole run 0.07 s) |
-| TC-16 | SEC-1, SEC-4 | Security | Make `results.txt` a directory; call `save_result` | Returns -1; the program prints only `Error: could not save your result.` with no path or OS text | **Pass** (returns -1; message verified in `main.c`) |
+| TC-16 | SEC-1, SEC-4 | Security | Make `results.txt` a folder; call `save_result` | Returns -1; the program prints only `Error: could not save your result.` with no path or system text | **Pass** (returns -1; message verified in `main.c`) |
 | TC-17 | SEC-3, NFR-4 | Security / negative | Feed a 5000-character line at the menu, then `4` | One `Error:` message, rest of the line discarded, program continues and exits normally | **Pass** |
 | TC-18 | SEC-5, SEC-3 | Security / inspection | Search the source for `fopen`, `gets`, `scanf`, `sprintf`, `strcpy` | `fopen` uses only the `RESULTS_FILE` constant; no `gets`, `scanf` or `sprintf`; the single `strcpy` copies the literal `"Player"` into a 64-byte buffer | **Pass** (re-check when `quiz.c` is merged) |
 | TC-19 | NFR-5 | Inspection | Compile `score.c` with its test without the other modules | Builds and runs on its own | **Pass** (`make test`) |
@@ -264,13 +264,13 @@ Result key: **Pass** and **Fail** are recorded results; **Blocked** needs unmerg
 | NFR-4 | TC-03, TC-17 |
 | NFR-5 | TC-19 |
 
-Every requirement in SRS v1.1 appears in at least one test case.
+Every requirement in SRS v1.2 appears in at least one test case.
 
 ---
 
 ## 14. Test Metrics and Reporting
 
-**Metrics:** percentage of cases executed, percentage passed and failed, requirement coverage, open defects by severity, defect age.
+**Measures:** % of test cases run, % passed and failed, % of requirements covered by tests, open defects by severity, and how long defects stay open.
 
 **Report after the first execution (12-Oct-2026):**
 
@@ -283,9 +283,10 @@ Every requirement in SRS v1.1 appears in at least one test case.
 | Blocked | 3 (TC-10, TC-11, TC-12: Quiz Engine) |
 | Not run | 1 (TC-13: Sprint-2) |
 | Requirement coverage by test cases | 100% of REQ-1 to REQ-22 and NFR-1 to NFR-5 |
-| Requirements verified by a passing test | REQ-1 to REQ-11, REQ-13, NFR-1, NFR-3, NFR-5, SEC-1 to SEC-3, SEC-5, SEC-6 |
+| Requirements checked by a passing test | REQ-1 to REQ-11, REQ-13, NFR-1, NFR-3, NFR-5, SEC-1 to SEC-3, SEC-5, SEC-6 |
+| Unit test coverage of `score.c` | 100% of lines and 100% of branches (measured with `gcov`) |
 
-Reports: a status update after each merged pull request that changes behaviour, and a final Test Summary Report at code freeze.
+Reports: a status update after each merged pull request that changes how the program behaves, and a final Test Summary Report at the code freeze.
 
 ---
 

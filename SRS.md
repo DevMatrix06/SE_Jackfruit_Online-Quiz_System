@@ -1,6 +1,6 @@
 # Software Requirements Specification
 ## Online Quiz System
-Version 1.1
+Version 1.2
 
 **Team:** Tejas, Sanjana, Vikas, Vaishnavi
 **Project:** UE24CS341A – Software Engineering, Jackfruit Phase 1
@@ -17,6 +17,7 @@ Version 1.1
 | Vaishnavi | Week 2 | Result Storage & Leaderboard feature (4.4), Nonfunctional Requirements (5.1–5.6), Appendices A & B added | 0.4 |
 | Team | Week 2 | Consolidated all sections, corrected requirement numbering (REQ-1 to REQ-22), completed Requirement Traceability Matrix | 1.0 |
 | Tejas | 12-Oct-2026 | Added UML use case diagram and use case table (3.5); added security objectives and requirements (5.3); gave NFRs IDs and measurable criteria (5.1-5.4, NFR-1 to NFR-5); fixed the pass threshold at 40% (REQ-10, BR-6); extended the traceability matrix | 1.1 |
+| Tejas | 12-Oct-2026 | Simplified the wording of the document (no change to the requirements) | 1.2 |
 
 ## Table of Contents
 
@@ -67,10 +68,10 @@ Appendix C: Requirement Traceability Matrix
 This document specifies the software requirements for the Online Quiz System, Version 1.0. The Online Quiz System is a console-based (command-line) application developed in C/C++ that presents users with multiple-choice questions and calculates their score based on the answers submitted. This SRS describes the functional and nonfunctional requirements of the system to guide its design, implementation, and testing.
 
 ### 1.2 Intended Audience and Reading Suggestions
-This SRS is intended for: the development team (Tejas, Sanjana, Vikas, Vaishnavi), who use it as the shared specification for implementation and testing; the course faculty/evaluators, who use it to assess requirement quality and completeness for Jackfruit Phase 1; and team members acting as testers, who will derive their test cases directly from the functional requirements in Section 4. A reader unfamiliar with the project should read Section 2 (Overall Description) first, as it explains the product's scope and operating environment before the detailed feature requirements in Section 4 are introduced.
+This SRS is for: the development team (Tejas, Sanjana, Vikas, Vaishnavi), who use it as the common reference for implementation and testing; the course faculty and evaluators, who use it to check the quality and completeness of the requirements for Jackfruit Phase 1; and team members acting as testers, who write test cases from the functional requirements in Section 4. A new reader should start with Section 2 (Overall Description), which explains the product and its environment before the detailed requirements in Section 4.
 
 ### 1.3 Product Scope
-The Online Quiz System is a lightweight, offline, console-based quiz application that lets a user select and attempt a set of multiple-choice questions and receive an instant, automatically calculated score at the end. Its purpose is to replace manual, paper-based quizzes with a fast, self-contained digital alternative, and to demonstrate the team's understanding of core C/C++ programming concepts (control flow, functions, file handling) and the software engineering process, as required for the Level 3 mini-project (UE24CS341A). The scope of this version is intentionally kept small (Easy difficulty tier per the project problem statement): a single quiz taker per session, a fixed or file-based question bank, immediate scoring, and a simple leaderboard of past results. Features such as networked multiplayer quizzes, a graphical interface, a web/backend server, a database, or user accounts and login are explicitly out of scope for this phase.
+The Online Quiz System is a small, offline, console-based quiz program. A user attempts a set of multiple-choice questions and gets a score at the end. It replaces paper-based quizzes with a quick digital version, and it shows the team's understanding of core C/C++ concepts (control flow, functions, file handling) and of the software engineering process, as required for the Level 3 mini-project (UE24CS341A). The scope is kept small (Easy difficulty tier per the project problem statement): one quiz taker per session, a fixed or file-based question bank, instant scoring, and a simple leaderboard of past results. Networked multiplayer quizzes, a graphical interface, a web server, a database, and user accounts or login are out of scope for this phase.
 
 ### 1.4 References
 - PES University, Dept. of CSE – "Jackfruit – Software Engineering Project Guidelines 2026" (UE24CS341A).
@@ -84,7 +85,7 @@ The Online Quiz System is a lightweight, offline, console-based quiz application
 <!-- OWNER: Vikas -->
 
 ### 2.1 Product Perspective
-The Online Quiz System is a new, self-contained, standalone console application; it is not a follow-on to an existing system and is not part of a larger product. It runs entirely on a single machine as one C/C++ executable, with no client-server split, no backend service, and no external database. The high-level flow is: User ↔ Console Program ↔ (optional) Local Question/Result Files. This is a mini-project for the Software Engineering course and is scoped accordingly — a small, offline, single-user tool.
+The Online Quiz System is a new, standalone console application. It is not an upgrade of an existing system and is not part of a larger product. It runs on a single machine as one C/C++ program, with no client-server split, no backend and no database. The flow is: User ↔ Console Program ↔ (optional) local question and result files. It is a mini-project for the Software Engineering course, so it is a small, offline, single-user tool.
 
 ### 2.2 Product Functions
 At a high level, the system shall:
@@ -100,20 +101,20 @@ This version of the system has a single user class:
 
 | User Class | Privileges | Characteristics |
 |---|---|---|
-| Quiz Taker | Navigate the menu, attempt the quiz, view instructions, view the leaderboard/past results | Any user running the console program locally; no login or account is required; basic computer literacy assumed, no special technical expertise |
+| Quiz Taker | Use the menu, attempt the quiz, view instructions, view the leaderboard and past results | Any user running the program on a local computer; no login or account is needed; basic computer knowledge is enough |
 
-There is no separate administrator role, login system, or web-based interface in this version — the question bank is fixed or maintained directly by the team, not through an in-app admin panel.
+There is no administrator role, login or web interface in this version. The question bank is kept by the team directly, not through an admin screen in the program.
 
 ### 2.4 Operating Environment
 - **Client/runtime:** A terminal or console window (Windows Command Prompt/PowerShell, or a Linux/macOS terminal).
 - **Language and compiler:** C/C++, compiled with a standard compiler such as GCC/g++ (or Turbo C++, if that is the toolchain specified by the course).
-- **Storage:** No external database is used. If persistence is implemented (see Section 4.4), it uses simple local text files read and written via the standard C/C++ file I/O library.
+- **Storage:** No database is used. Results are saved in simple local text files using the standard C/C++ file functions (see Section 4.4).
 - **Network:** None required — the application runs fully offline.
 
 ### 2.5 Design and Implementation Constraints
 - The application must run entirely within a console/terminal — no graphical user interface (GUI) is in scope for this version.
 - The system is single-user, single-session — no concurrent users and no multiplayer functionality.
-- No web frontend, backend server, or database is used; any data persistence uses local flat files only.
+- No web page, server or database is used; data is saved in local text files only.
 - No login/authentication or administrator role is included in this version.
 - The question bank size is limited and appropriate for a mini-project (a small, fixed or file-loaded set of multiple-choice questions).
 - Git and GitHub are used for version control; individual commits are checked as evidence of each team member's contribution.
@@ -121,8 +122,8 @@ There is no separate administrator role, login system, or web-based interface in
 ### 2.6 Assumptions and Dependencies
 - The user has access to a working C/C++ compiler and a terminal to run the compiled program.
 - The standard C/C++ library (console I/O, and file I/O if used) is available on the target machine — no third-party libraries are required.
-- The question bank content is agreed upon and prepared by the team before implementation and is assumed to be well-formed (each question has exactly one correct option).
-- The system depends on no external services, network connectivity, or runtime beyond the compiled executable itself.
+- The question bank is agreed and prepared by the team before implementation, and each question is assumed to have exactly one correct option.
+- The system needs no external service or network connection. Only the compiled program is needed.
 
 ---
 
@@ -139,7 +140,7 @@ There is no separate administrator role, login system, or web-based interface in
 ### 3.2 Software Interfaces
 - The Online Quiz System shall run as a C/C++ console application using a standard C/C++ compiler and shall operate through a terminal or console window.
 - The question bank shall contain multiple-choice questions, with each question having four answer options and exactly one correct option. The question bank shall be maintained locally by the team and shall not require an external database or web service.
-- The system shall use a local text file named results.txt to store completed quiz results. Each stored record shall contain the player's name and final score. The stored results shall be available for retrieval when the user views the leaderboard.
+- The system shall use a local text file named results.txt to store completed quiz results. Each stored record shall contain the player's name and final score. The stored results shall be read back when the user views the leaderboard.
 
 ### 3.3 Communications Interfaces
 - The Online Quiz System shall operate as a standalone offline console application.
@@ -157,20 +158,20 @@ There is no separate administrator role, login system, or web-based interface in
 
 ![UML use case diagram of the Online Quiz System](docs/diagrams/use-case.png)
 
-The only human actor is the **Quiz Taker**. The question bank (`questions.txt`) and the results file (`results.txt`) are secondary actors: local files the system reads or writes. Starting a quiz includes answering questions, calculating the score, viewing the result and saving the result.
+The only person using the system is the **Quiz Taker**. The question bank (`questions.txt`) and the results file (`results.txt`) are shown as secondary actors because the system reads or writes them. Start Quiz includes answering questions, calculating the score, viewing the result and saving the result.
 
 | ID | Use Case | Actor | Description | Related Requirements |
 |---|---|---|---|---|
 | UC1 | Start Quiz | Quiz Taker | Enters a name and takes the quiz from the first question to the result. Includes UC2 to UC5. | REQ-4, REQ-17 to REQ-22 |
-| UC2 | Answer Questions | Quiz Taker, Question Bank | One question at a time is shown; the entered choice is validated and recorded. | REQ-17 to REQ-22 |
-| UC3 | Calculate Score | System | Compares answers with correct options, counts correct/incorrect, computes percentage and Pass/Fail. | REQ-7 to REQ-10 |
+| UC2 | Answer Questions | Quiz Taker, Question Bank | One question is shown at a time; the answer entered is checked and recorded. | REQ-17 to REQ-22 |
+| UC3 | Calculate Score | System | Compares answers with the correct options, counts correct and incorrect answers, works out the percentage and Pass/Fail. | REQ-7 to REQ-10 |
 | UC4 | View Result | Quiz Taker | Score, percentage, counts and Pass/Fail are shown after the last question. | REQ-11 |
-| UC5 | Save Result | Results File | Name and score are appended to the results file. | REQ-12, REQ-13 |
-| UC6 | View Leaderboard | Quiz Taker, Results File | Stored results are read and shown from highest to lowest score. | REQ-14 to REQ-16 |
+| UC5 | Save Result | Results File | The name and score are added to the results file. | REQ-12, REQ-13 |
+| UC6 | View Leaderboard | Quiz Taker, Results File | Stored results are read and shown from the highest to the lowest score. | REQ-14 to REQ-16 |
 | UC7 | View Instructions | Quiz Taker | A short help screen is shown. | REQ-4 |
-| UC8 | Exit | Quiz Taker | The program says goodbye and terminates cleanly. | REQ-6 |
+| UC8 | Exit | Quiz Taker | The program says goodbye and closes cleanly. | REQ-6 |
 
-REQ-1, REQ-2, REQ-3 and REQ-5 (menu display, validation, re-prompt and return to menu) apply to every use case that starts from the main menu.
+REQ-1, REQ-2, REQ-3 and REQ-5 (show the menu, check the input, ask again on bad input, return to the menu) apply to every use case that starts from the main menu.
 
 #### 3.5.2 Activity Flow
 
@@ -240,7 +241,7 @@ The Main Menu is the entry point of the Online Quiz System. On launch, it presen
 | REQ-3 | The system shall re-prompt the user with an error message if invalid (out-of-range or non-numeric) menu input is entered, without terminating the program. | High | Negative test |
 | REQ-4 | The system shall navigate the user to the correct feature (Quiz Engine, Leaderboard, or Instructions screen) based on valid menu input. | High | Functional test |
 | REQ-5 | The system shall return the user to the main menu after a selected feature (quiz attempt, leaderboard view, or instructions) has finished. | Medium | Functional test |
-| REQ-6 | The system shall terminate the program cleanly, without residual open file handles, when the user selects the exit option. | Medium | Functional/code review |
+| REQ-6 | The system shall terminate the program cleanly, without leaving any file open, when the user selects the exit option. | Medium | Functional/code review |
 
 ---
 
@@ -330,22 +331,22 @@ The Result Storage & Leaderboard feature stores the player's name and final scor
 
 | ID | Requirement | Priority | Verification |
 |----|-------------|----------|---------------|
-| NFR-1 | The system shall process each user input (menu choice or quiz answer) and display the next prompt or screen within 1 second on a standard computer. Displaying a leaderboard of up to 100 stored results shall also complete within 1 second. | High | Performance test (timed run) |
+| NFR-1 | The system shall respond to each user input (menu choice or quiz answer) within 1 second on a standard computer. Showing a leaderboard of up to 100 stored results shall also take no more than 1 second. | High | Performance test (timed run) |
 
 ### 5.2 Safety Requirements
-Not applicable. The Online Quiz System is a non-safety-critical console application and does not control physical devices or processes that could cause safety hazards.
+Not applicable. The Online Quiz System is a console program that does not control any physical device, so it has no safety risk.
 
 ### 5.3 Security Requirements
-The system does not require user authentication or login functionality. It is intended for single-user, local use. Its security concerns are therefore limited to safe handling of user input, protecting the integrity of the stored results, and not exposing system information.
+The system has no login and is used by one person on one computer. So its security needs are limited to three things: handling input safely, keeping the saved results correct, and not showing system details to the user.
 
 #### 5.3.1 Security Objectives
 
 | ID | Objective |
 |----|-----------|
-| SO-1 | **Confidentiality of system information:** the application shall not reveal file paths, operating-system details or internal state to the user. |
-| SO-2 | **Integrity of stored data:** records in the results file shall remain well-formed and shall not be corrupted by text entered by the user. |
-| SO-3 | **Availability and robustness:** malformed input or a file problem shall not crash or hang the application. |
-| SO-4 | **Safe input handling:** all user input shall be handled without memory-safety faults such as buffer overflow. |
+| SO-1 | **Do not show system details.** The program shall not show file paths, operating-system details or internal data to the user. |
+| SO-2 | **Keep saved results correct.** Records in the results file shall stay in the correct format and shall not be damaged by text typed by the user. |
+| SO-3 | **Do not crash.** Wrong input or a file problem shall not crash or hang the program. |
+| SO-4 | **Handle input safely.** All user input shall be handled without a buffer overflow. |
 
 #### 5.3.2 Security Requirements
 
@@ -353,21 +354,21 @@ All security requirements below are part of NFR-2.
 
 | ID | Requirement | Objective | Priority | Verification |
 |----|-------------|-----------|----------|---------------|
-| SEC-1 | Error messages shall consist of a short description prefixed with "Error:" and shall not contain file paths, operating-system error codes or memory addresses. | SO-1 | High | Negative test / inspection |
-| SEC-2 | Before a result is written, any comma, carriage return or line feed in the player's name shall be replaced with a space so that every record remains one "Name,Score" line. | SO-2 | High | Functional test |
-| SEC-3 | All keyboard input shall be read into fixed-size buffers with explicit length limits (64 characters for a menu line and for the player name); input beyond the limit shall be discarded without overflowing the buffer. | SO-4 | High | Negative test / code review |
-| SEC-4 | If the results file cannot be opened, read or written, the system shall display an error message and return to the main menu rather than terminate. | SO-3 | High | Negative test |
-| SEC-5 | The names of the question file and results file shall be fixed in the program and shall not be taken from user input. | SO-1, SO-2 | Medium | Code review |
-| SEC-6 | When standard input ends (Ctrl+D or Ctrl+Z), the system shall terminate cleanly without looping or crashing. | SO-3 | Medium | Negative test |
+| SEC-1 | Error messages shall be a short description starting with "Error:". They shall not contain file paths, system error codes or memory addresses. | SO-1 | High | Negative test, inspection |
+| SEC-2 | Before a result is saved, any comma, carriage return or new line in the player's name shall be replaced with a space, so every record stays on one `Name,Score` line. | SO-2 | High | Functional test |
+| SEC-3 | All keyboard input shall be read into fixed-size buffers with a length limit (64 characters for a menu line and for the player's name). Extra characters shall be discarded without overflowing the buffer. | SO-4 | High | Negative test, code review |
+| SEC-4 | If the results file cannot be opened, read or written, the system shall show an error message and return to the main menu instead of closing. | SO-3 | High | Negative test |
+| SEC-5 | The question file name and the results file name shall be fixed in the program. They shall not come from user input. | SO-1, SO-2 | Medium | Code review |
+| SEC-6 | When keyboard input ends (Ctrl+D or Ctrl+Z), the system shall close cleanly without looping or crashing. | SO-3 | Medium | Negative test |
 
 ### 5.4 Software Quality Attributes
 
 | ID | Attribute | Requirement | Priority | Verification |
 |----|-----------|-------------|----------|---------------|
-| NFR-2 | Security | The system shall satisfy security requirements SEC-1 to SEC-6 in Section 5.3.2. | High | See SEC-1 to SEC-6 |
-| NFR-3 | Usability | The system shall provide clear menu options, prompts and error messages. Every invalid input shall produce a message beginning with "Error:" followed by a new prompt, and a first-time user with basic computer knowledge shall be able to complete a quiz using only the on-screen prompts. | Medium | Usability walkthrough / inspection |
-| NFR-4 | Reliability | The system shall not crash or terminate abnormally when given invalid input (non-numeric, out-of-range, empty or longer than 64 characters) or when the results file is missing or unreadable. It shall display an error and continue or return to the main menu. | High | Negative test |
-| NFR-5 | Maintainability | The system shall be organised as separate modules (menu control `main.c`, quiz engine `quiz.c`, scoring `score.c`, storage and leaderboard `storage.c`) with public interfaces declared in header files, so that one module can be changed without editing the others. | Medium | Code review |
+| NFR-2 | Security | The system shall meet security requirements SEC-1 to SEC-6 (Section 5.3.2). | High | See SEC-1 to SEC-6 |
+| NFR-3 | Usability | Menus, prompts and error messages shall be clear. Every invalid input shall give a message starting with "Error:" followed by a new prompt. A first-time user shall be able to finish a quiz using only the on-screen prompts. | Medium | Usability walkthrough, inspection |
+| NFR-4 | Reliability | The system shall not crash when the input is invalid (not a number, out of range, empty, or longer than 64 characters) or when the results file is missing or cannot be read. It shall show an error and continue, or return to the main menu. | High | Negative test |
+| NFR-5 | Maintainability | The code shall be split into separate modules: menu (`main.c`), quiz (`quiz.c`), scoring (`score.c`), and storage and leaderboard (`storage.c`). Their functions shall be declared in header files, so one module can be changed without editing the others. | Medium | Code review |
 
 ### 5.5 Business Rules
 - **BR-1:** Only one quiz attempt shall be scored at a time.
@@ -378,7 +379,7 @@ All security requirements below are part of NFR-2.
 - **BR-6:** A quiz attempt is a Pass when its percentage is 40% or higher; otherwise it is a Fail.
 
 ### 5.6 Other Requirements
-Not applicable. No additional requirements have been identified beyond those specified in the preceding sections.
+Not applicable. There are no other requirements beyond those above.
 
 ---
 
@@ -399,7 +400,7 @@ Not applicable. No additional requirements have been identified beyond those spe
 
 **Leaderboard:** A list of stored quiz results arranged according to the players' scores.
 
-**Persistent File:** A file used to store information so that it remains available after the program terminates.
+**Persistent File:** A file that keeps its data after the program closes.
 
 ## Appendix B: Field Layouts
 <!-- OWNER: Vaishnavi -->
