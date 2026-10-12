@@ -32,7 +32,7 @@ Work in progress (Sprint-1).
 | Main menu and input checks | Done |
 | Scoring and result screen | Done, with unit tests |
 | Saving results | Done |
-| Quiz questions and answers | In progress |
+| Quiz questions and answers | Done |
 | Leaderboard | Planned for Sprint-2 |
 
 ## Folders

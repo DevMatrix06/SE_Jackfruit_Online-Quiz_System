@@ -210,7 +210,7 @@ Security testing covers the six security requirements in SRS Section 5.3.2. The 
 
 ### 13.1 Test Cases
 
-Result key: **Pass** and **Fail** are recorded results; **Blocked** needs code that is not merged yet; **Not run** is planned for a later sprint. Run on 12-Oct-2026 on `main` at commit `2da664a`, together with the 8 scoring unit tests in `tests/test_score.c`.
+Result key: **Pass** and **Fail** are recorded results; **Blocked** needs code that is not merged yet; **Not run** is planned for a later sprint. Run on 12-Oct-2026 on `main` after the quiz engine was completed (TC-10 to TC-12 were first blocked at commit `2da664a`), together with the 8 scoring unit tests in `tests/test_score.c`.
 
 | TC | Requirement | Type | Steps | Expected result | Result |
 |---|---|---|---|---|---|
@@ -223,9 +223,9 @@ Result key: **Pass** and **Fail** are recorded results; **Blocked** needs code t
 | TC-07 | REQ-10 | Unit (boundary) | 4 of 10 correct, then 3 of 10 correct | 40% is Pass; 30% is Fail | **Pass** (Test 6, 7) |
 | TC-08 | REQ-11 | Unit | `show_result` with a result; then with NULL | Prints score, percentage, correct and incorrect counts and Pass/Fail; NULL prints `Error: result is unavailable.` and does not crash | **Pass** (Test 1 to 5) |
 | TC-09 | REQ-13, SEC-2 | Functional / security | `save_result("Tara,Bad", ...)`, then names `A` and `Line` | Records are `Tara Bad,4`, `A,4`, `Line,4`; one line each, return 0 | **Pass** |
-| TC-10 | REQ-12 | Integration | Complete a quiz as `Asha` | One new line `Asha,<score>` is appended to `results.txt` | **Blocked** (Quiz Engine) |
-| TC-11 | REQ-17 to REQ-22 | System | Start quiz, answer every question | Questions appear one at a time with options A to D; each answer is recorded; the quiz ends after the last question and shows the result | **Blocked** (Quiz Engine) |
-| TC-12 | REQ-19 | Negative | During a question enter `E`, an empty line, `1`, then `B` | Each invalid entry gives an `Error:` line and the same question again; `B` is accepted | **Blocked** (Quiz Engine) |
+| TC-10 | REQ-12 | Integration | Complete a quiz as `Asha` | One new line `Asha,<score>` is appended to `results.txt` | **Pass** (`Asha,3` after answering B, A, C, D, A) |
+| TC-11 | REQ-17 to REQ-22 | System | Start quiz, answer every question | Questions appear one at a time with options A to D; each answer is recorded; the quiz ends after the last question and shows the result | **Pass** (5 questions shown one by one, result shown after the last) |
+| TC-12 | REQ-19 | Negative | During a question enter `E`, an empty line, `1`, then `B` | Each invalid entry gives an `Error:` line and the same question again; `B` is accepted | **Pass** (3 `Error:` lines, then `B` accepted) |
 | TC-13 | REQ-14, REQ-15 | Functional | Fill `results.txt` with `Vikas,10`, `Vaishnavi,8`, `Tejas,9`; choose View Leaderboard | Order shown is 10, 9, 8 | **Not run** (Sprint-2) |
 | TC-14 | REQ-16, SEC-4 | Negative | Delete `results.txt`; choose View Leaderboard | A short "no results yet" message and return to the menu; no crash | **Fail** (known): no crash, but the leaderboard is still a stub and prints nothing; due in Sprint-2 |
 | TC-15 | NFR-1 | Performance | Time a full scripted run: menu, start quiz, name, exit | Each response within 1 second | **Pass** (whole run 0.07 s) |
@@ -277,13 +277,13 @@ Every requirement in SRS v1.2 appears in at least one test case.
 | Measure | Value |
 |---|---|
 | Test cases designed | 20 |
-| Executed | 16 |
-| Pass | 15 |
+| Executed | 19 |
+| Pass | 18 |
 | Fail | 1 (TC-14, leaderboard not yet implemented) |
-| Blocked | 3 (TC-10, TC-11, TC-12: Quiz Engine) |
+| Blocked | 0 |
 | Not run | 1 (TC-13: Sprint-2) |
 | Requirement coverage by test cases | 100% of REQ-1 to REQ-22 and NFR-1 to NFR-5 |
-| Requirements checked by a passing test | REQ-1 to REQ-11, REQ-13, NFR-1, NFR-3, NFR-5, SEC-1 to SEC-3, SEC-5, SEC-6 |
+| Requirements checked by a passing test | REQ-1 to REQ-13, REQ-17 to REQ-22, NFR-1, NFR-3, NFR-5, SEC-1 to SEC-3, SEC-5, SEC-6 |
 | Unit test coverage of `score.c` | 100% of lines and 100% of branches (measured with `gcov`) |
 
 Reports: a status update after each merged pull request that changes how the program behaves, and a final Test Summary Report at the code freeze.

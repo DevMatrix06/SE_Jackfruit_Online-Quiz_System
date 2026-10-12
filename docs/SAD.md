@@ -153,7 +153,7 @@ The only link between modules is the two shared data types: `score.h` includes `
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Quiz Engine not ready when others integrate | Cannot demo the whole quiz | Stubs (empty functions) with the agreed names are on `main`; scoring and storage are tested on their own |
+| Quiz Engine not ready when others integrate | Cannot demo the whole quiz | Stubs (empty functions) with the agreed names were on `main`; scoring and storage were tested on their own. Now resolved: the engine is merged |
 | Question file is in the wrong format or missing | Quiz cannot start | `load_questions` returns an error; menu shows an error and continues (NFR-4) |
 | Two people edit the same file | Merge conflicts | File ownership table in `TEAM-TASKS.md`; one pull request per issue, reviewed by the repo owner |
 | `results.txt` edited by hand or damaged | Wrong leaderboard | Lines in the wrong format are skipped; the remaining risk is accepted (3.9) |
@@ -365,10 +365,10 @@ Result: Pass
 
 | # | Item | Plan |
 |---|---|---|
-| 1 | Quiz Engine (`load_questions`, `run_quiz`) is still a stub | Sprint-1, Sanjana (REQ-17 to REQ-22) |
+| 1 | Quiz Engine (`load_questions`, `run_quiz`) | Done in Sprint-1 (REQ-17 to REQ-22); closed |
 | 2 | Leaderboard read and sort are not implemented | Sprint-2, Vaishnavi (REQ-14 to REQ-16) |
 | 3 | REQ-12 says "score and percentage" are passed to storage, but the file stores name and score only (BR-4, Appendix B) | The whole `Result` is passed; only name and score are saved. BR-4 stays as the saved format |
-| 4 | The question file format is shown only by the sample file; no loader code uses it yet | Sanjana documents the format in the pull request |
+| 4 | The question file format is shown only by the sample file | `load_questions` reads 6 lines per question: text, options A to D, then the correct letter |
 | 5 | Equal scores have no set order on the leaderboard | Keep the order they appear in the file |
 | 6 | Limit of 100 questions | Enough for this project; review it only if the question bank grows |
 
