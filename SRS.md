@@ -1,6 +1,6 @@
 # Software Requirements Specification
 ## Online Quiz System
-Version 1.0
+Version 1.1
 
 **Team:** Tejas, Sanjana, Vikas, Vaishnavi
 **Project:** UE24CS341A – Software Engineering, Jackfruit Phase 1
@@ -16,6 +16,7 @@ Version 1.0
 | Sanjana | Week 2 | External Interface Requirements (3.1–3.5) and Quiz Engine feature (4.2) added | 0.3 |
 | Vaishnavi | Week 2 | Result Storage & Leaderboard feature (4.4), Nonfunctional Requirements (5.1–5.6), Appendices A & B added | 0.4 |
 | Team | Week 2 | Consolidated all sections, corrected requirement numbering (REQ-1 to REQ-22), completed Requirement Traceability Matrix | 1.0 |
+| Tejas | 12-Oct-2026 | Added UML use case diagram and use case table (3.5); added security objectives and requirements (5.3); gave NFRs IDs and measurable criteria (5.1-5.4, NFR-1 to NFR-5); fixed the pass threshold at 40% (REQ-10, BR-6); extended the traceability matrix | 1.1 |
 
 ## Table of Contents
 
@@ -37,6 +38,8 @@ Version 1.0
    3.3 Communications Interfaces
    3.4 Hardware Interfaces
    3.5 Analysis Models
+      3.5.1 UML Use Case Diagram
+      3.5.2 Activity Flow
 4. System Features
    4.1 Main Menu & Navigation
    4.2 Quiz Engine (Question Delivery & Answer Capture)
@@ -46,6 +49,8 @@ Version 1.0
    5.1 Performance Requirements
    5.2 Safety Requirements
    5.3 Security Requirements
+      5.3.1 Security Objectives
+      5.3.2 Security Requirements
    5.4 Software Quality Attributes
    5.5 Business Rules
    5.6 Other Requirements
@@ -147,6 +152,27 @@ There is no separate administrator role, login system, or web-based interface in
 - The system shall operate on standard desktop or laptop hardware capable of running the required C/C++ environment.
 
 ### 3.5 Analysis Models
+
+#### 3.5.1 UML Use Case Diagram
+
+![UML use case diagram of the Online Quiz System](docs/diagrams/use-case.png)
+
+The only human actor is the **Quiz Taker**. The question bank (`questions.txt`) and the results file (`results.txt`) are secondary actors: local files the system reads or writes. Starting a quiz includes answering questions, calculating the score, viewing the result and saving the result.
+
+| ID | Use Case | Actor | Description | Related Requirements |
+|---|---|---|---|---|
+| UC1 | Start Quiz | Quiz Taker | Enters a name and takes the quiz from the first question to the result. Includes UC2 to UC5. | REQ-4, REQ-17 to REQ-22 |
+| UC2 | Answer Questions | Quiz Taker, Question Bank | One question at a time is shown; the entered choice is validated and recorded. | REQ-17 to REQ-22 |
+| UC3 | Calculate Score | System | Compares answers with correct options, counts correct/incorrect, computes percentage and Pass/Fail. | REQ-7 to REQ-10 |
+| UC4 | View Result | Quiz Taker | Score, percentage, counts and Pass/Fail are shown after the last question. | REQ-11 |
+| UC5 | Save Result | Results File | Name and score are appended to the results file. | REQ-12, REQ-13 |
+| UC6 | View Leaderboard | Quiz Taker, Results File | Stored results are read and shown from highest to lowest score. | REQ-14 to REQ-16 |
+| UC7 | View Instructions | Quiz Taker | A short help screen is shown. | REQ-4 |
+| UC8 | Exit | Quiz Taker | The program says goodbye and terminates cleanly. | REQ-6 |
+
+REQ-1, REQ-2, REQ-3 and REQ-5 (menu display, validation, re-prompt and return to menu) apply to every use case that starts from the main menu.
+
+#### 3.5.2 Activity Flow
 
 ```
               ┌─────────┐
@@ -264,7 +290,7 @@ This feature tracks the user's correct and incorrect answers as the quiz progres
 | REQ-7 | The system shall compare each submitted answer to the question's correct option and update the running score accordingly. | High | Functional test |
 | REQ-8 | The system shall separately track the count of correctly and incorrectly answered questions during the quiz. | High | Functional test |
 | REQ-9 | The system shall calculate the total score and percentage once all questions in the quiz have been answered. | High | Functional test |
-| REQ-10 | The system shall classify the overall result (e.g. Pass/Fail, or a grade band) based on a defined percentage threshold. | Medium | Functional test |
+| REQ-10 | The system shall classify the overall result as Pass when the percentage is 40% or higher and as Fail when it is below 40%. | Medium | Functional test |
 | REQ-11 | The system shall display the final score, percentage, and correct/incorrect counts to the user immediately after the quiz ends. | High | Functional test |
 | REQ-12 | The system shall pass the completed result (score and percentage) to the Result Storage & Leaderboard feature for persistence. | Medium | Integration test |
 
@@ -301,24 +327,47 @@ The Result Storage & Leaderboard feature stores the player's name and final scor
 <!-- OWNER: Vaishnavi -->
 
 ### 5.1 Performance Requirements
-The system shall display questions, menu options, and results without perceptible delay. User input shall be processed within one second under normal operating conditions on a standard computer. The leaderboard shall be generated without significant delay for the expected number of stored quiz results.
+
+| ID | Requirement | Priority | Verification |
+|----|-------------|----------|---------------|
+| NFR-1 | The system shall process each user input (menu choice or quiz answer) and display the next prompt or screen within 1 second on a standard computer. Displaying a leaderboard of up to 100 stored results shall also complete within 1 second. | High | Performance test (timed run) |
 
 ### 5.2 Safety Requirements
 Not applicable. The Online Quiz System is a non-safety-critical console application and does not control physical devices or processes that could cause safety hazards.
 
 ### 5.3 Security Requirements
-The system does not require user authentication or login functionality. It is intended for single-user, local use. The system shall avoid exposing unnecessary system or file information to the user during normal operation. If a result file cannot be accessed, the system shall display an appropriate error message rather than terminating unexpectedly.
+The system does not require user authentication or login functionality. It is intended for single-user, local use. Its security concerns are therefore limited to safe handling of user input, protecting the integrity of the stored results, and not exposing system information.
+
+#### 5.3.1 Security Objectives
+
+| ID | Objective |
+|----|-----------|
+| SO-1 | **Confidentiality of system information:** the application shall not reveal file paths, operating-system details or internal state to the user. |
+| SO-2 | **Integrity of stored data:** records in the results file shall remain well-formed and shall not be corrupted by text entered by the user. |
+| SO-3 | **Availability and robustness:** malformed input or a file problem shall not crash or hang the application. |
+| SO-4 | **Safe input handling:** all user input shall be handled without memory-safety faults such as buffer overflow. |
+
+#### 5.3.2 Security Requirements
+
+All security requirements below are part of NFR-2.
+
+| ID | Requirement | Objective | Priority | Verification |
+|----|-------------|-----------|----------|---------------|
+| SEC-1 | Error messages shall consist of a short description prefixed with "Error:" and shall not contain file paths, operating-system error codes or memory addresses. | SO-1 | High | Negative test / inspection |
+| SEC-2 | Before a result is written, any comma, carriage return or line feed in the player's name shall be replaced with a space so that every record remains one "Name,Score" line. | SO-2 | High | Functional test |
+| SEC-3 | All keyboard input shall be read into fixed-size buffers with explicit length limits (64 characters for a menu line and for the player name); input beyond the limit shall be discarded without overflowing the buffer. | SO-4 | High | Negative test / code review |
+| SEC-4 | If the results file cannot be opened, read or written, the system shall display an error message and return to the main menu rather than terminate. | SO-3 | High | Negative test |
+| SEC-5 | The names of the question file and results file shall be fixed in the program and shall not be taken from user input. | SO-1, SO-2 | Medium | Code review |
+| SEC-6 | When standard input ends (Ctrl+D or Ctrl+Z), the system shall terminate cleanly without looping or crashing. | SO-3 | Medium | Negative test |
 
 ### 5.4 Software Quality Attributes
 
-**Usability**
-The system shall provide clear menu options, prompts, and error messages so that a first-time user with basic computer knowledge can operate the quiz without difficulty.
-
-**Reliability**
-The system shall handle invalid user input and missing result files without crashing. The system shall continue operation or return to the appropriate menu whenever an input or file-related error can be handled.
-
-**Maintainability**
-The system shall be structured so that the question bank, result storage, and leaderboard functionality can be modified or extended without requiring major changes to unrelated system features.
+| ID | Attribute | Requirement | Priority | Verification |
+|----|-----------|-------------|----------|---------------|
+| NFR-2 | Security | The system shall satisfy security requirements SEC-1 to SEC-6 in Section 5.3.2. | High | See SEC-1 to SEC-6 |
+| NFR-3 | Usability | The system shall provide clear menu options, prompts and error messages. Every invalid input shall produce a message beginning with "Error:" followed by a new prompt, and a first-time user with basic computer knowledge shall be able to complete a quiz using only the on-screen prompts. | Medium | Usability walkthrough / inspection |
+| NFR-4 | Reliability | The system shall not crash or terminate abnormally when given invalid input (non-numeric, out-of-range, empty or longer than 64 characters) or when the results file is missing or unreadable. It shall display an error and continue or return to the main menu. | High | Negative test |
+| NFR-5 | Maintainability | The system shall be organised as separate modules (menu control `main.c`, quiz engine `quiz.c`, scoring `score.c`, storage and leaderboard `storage.c`) with public interfaces declared in header files, so that one module can be changed without editing the others. | Medium | Code review |
 
 ### 5.5 Business Rules
 - **BR-1:** Only one quiz attempt shall be scored at a time.
@@ -326,6 +375,7 @@ The system shall be structured so that the question bank, result storage, and le
 - **BR-3:** Every completed quiz attempt shall produce a final score.
 - **BR-4:** Each stored result shall contain the player's name and final score.
 - **BR-5:** Leaderboard entries shall be displayed in descending order of score.
+- **BR-6:** A quiz attempt is a Pass when its percentage is 40% or higher; otherwise it is a Fail.
 
 ### 5.6 Other Requirements
 Not applicable. No additional requirements have been identified beyond those specified in the preceding sections.
@@ -402,3 +452,8 @@ Each line represents one completed quiz attempt.
 | 20 | REQ-20 | Record the user's answer before proceeding | 4.2 | Sanjana |
 | 21 | REQ-21 | Proceed to the next question after a valid answer | 4.2 | Sanjana |
 | 22 | REQ-22 | Continue presenting questions until the quiz is complete | 4.2 | Sanjana |
+| 23 | NFR-1 | Process input within 1 second | 5.1 | Vaishnavi |
+| 24 | NFR-2 | Security objectives SO-1 to SO-4, requirements SEC-1 to SEC-6 | 5.3 | Vaishnavi |
+| 25 | NFR-3 | Usability: clear menus, prompts and error messages | 5.4 | Tejas |
+| 26 | NFR-4 | Reliability: no crash on invalid input or missing files | 5.4 | Sanjana |
+| 27 | NFR-5 | Maintainability: modular code structure | 5.4 | Vikas |

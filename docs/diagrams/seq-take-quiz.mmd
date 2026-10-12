@@ -1,0 +1,45 @@
+sequenceDiagram
+  actor U as Quiz Taker
+  participant M as Menu Controller (main.c)
+  participant Q as Quiz Engine (quiz.c)
+  participant S as Scoring (score.c)
+  participant R as Storage (storage.c)
+  participant QF as questions.txt
+  participant RF as results.txt
+
+  U->>M: choose 1 (Start Quiz)
+  M->>U: prompt "Enter your name"
+  U->>M: name
+  M->>Q: load_questions(path, qs, max)
+  Q->>QF: read question bank
+  QF-->>Q: questions
+  Q-->>M: count n
+  alt n <= 0
+    M->>U: "Error: could not load any questions."
+    M-->>U: return to main menu
+  else n > 0
+    M->>Q: run_quiz(qs, n, answers)
+    loop for each question
+      Q->>U: display question and options A-D
+      U->>Q: answer
+      alt not A, B, C or D
+        Q->>U: "Error:" message, ask again
+      else valid
+        Q->>Q: answers[i] = choice
+      end
+    end
+    Q-->>M: answers filled
+    M->>S: calculate_result(qs, answers, n)
+    S-->>M: Result (score, counts, percent, passed)
+    M->>S: show_result(&result)
+    S->>U: score, percentage, counts, Pass/Fail
+    M->>R: save_result(name, &result)
+    R->>RF: append "Name,Score"
+    alt write fails
+      R-->>M: -1
+      M->>U: "Error: could not save your result."
+    else saved
+      R-->>M: 0
+    end
+    M-->>U: return to main menu
+  end

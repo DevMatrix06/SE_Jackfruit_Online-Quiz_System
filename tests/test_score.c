@@ -81,6 +81,39 @@ int main(void) {
   show_result(NULL);
   printf("--> Test 5 Passed!\n\n");
 
+  /* Test Case 6: Pass threshold boundary (4 of 10 correct -> 40%, Pass) */
+  printf("--- Test Case 6: Boundary 4/10 (40%%, Pass) ---\n");
+  Question qs10[10];
+  char answers10[10];
+  int i;
+  for (i = 0; i < 10; i++) {
+    qs10[i] = qs1[0];
+    qs10[i].correct = 'A';
+    answers10[i] = (i < 4) ? 'A' : 'B';
+  }
+  Result r6 = calculate_result(qs10, answers10, 10);
+  assert(r6.score == 4);
+  assert(r6.percent == 40.0);
+  assert(r6.passed == 1);
+  printf("--> Test 6 Passed!\n\n");
+
+  /* Test Case 7: Just below the threshold (3 of 10 correct -> 30%, Fail) */
+  printf("--- Test Case 7: Below boundary 3/10 (30%%, Fail) ---\n");
+  answers10[3] = 'B';
+  Result r7 = calculate_result(qs10, answers10, 10);
+  assert(r7.score == 3);
+  assert(r7.percent == 30.0);
+  assert(r7.passed == 0);
+  printf("--> Test 7 Passed!\n\n");
+
+  /* Test Case 8: Invalid arguments must not crash (zero result) */
+  printf("--- Test Case 8: Invalid arguments ---\n");
+  Result r8 = calculate_result(NULL, answers10, 10);
+  assert(r8.total == 0 && r8.score == 0 && r8.passed == 0);
+  r8 = calculate_result(qs10, answers10, 0);
+  assert(r8.total == 0 && r8.score == 0 && r8.passed == 0);
+  printf("--> Test 8 Passed!\n\n");
+
   printf("=========================================\n");
   printf("   All test cases passed successfully!   \n");
   printf("=========================================\n");

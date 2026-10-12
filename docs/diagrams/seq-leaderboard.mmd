@@ -1,0 +1,19 @@
+sequenceDiagram
+  actor U as Quiz Taker
+  participant M as Menu Controller (main.c)
+  participant R as Storage (storage.c)
+  participant RF as results.txt
+
+  U->>M: choose 2 (View Leaderboard)
+  M->>R: show_leaderboard()
+  R->>RF: open for reading
+  alt file missing or unreadable
+    RF-->>R: open fails
+    R->>U: "No results stored yet." (no crash, no path shown)
+  else file opened
+    RF-->>R: records "Name,Score"
+    R->>R: skip malformed lines, sort by score descending
+    R->>U: ranked leaderboard
+  end
+  R-->>M: return
+  M-->>U: back to main menu

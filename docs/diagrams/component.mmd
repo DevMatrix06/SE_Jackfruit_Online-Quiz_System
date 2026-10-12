@@ -1,0 +1,23 @@
+flowchart TB
+  user(["Quiz Taker (keyboard and console)"])
+
+  subgraph PRES["Presentation and Control Layer"]
+    main["«component»<br/>Menu Controller<br/>src/main.c"]
+  end
+
+  subgraph SVC["Domain and Data Access Layers"]
+    direction LR
+    quiz["«component»<br/>Quiz Engine<br/>quiz.c / quiz.h"]
+    score["«component»<br/>Scoring Module<br/>score.c / score.h"]
+    store["«component»<br/>Result Storage<br/>and Leaderboard<br/>storage.c / storage.h"]
+  end
+
+  qfile[("questions.txt<br/>question bank")]
+  rfile[("results.txt<br/>Name,Score records")]
+
+  user --> main
+  main -- "IQuiz" --> quiz
+  main -- "IScore" --> score
+  main -- "IStorage" --> store
+  quiz --> qfile
+  store --> rfile
