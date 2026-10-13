@@ -43,7 +43,20 @@ int load_questions(const char *path, Question qs[], int max)
 
 void run_quiz(const Question qs[], int n, char answers[])
 {
-    (void)qs;
-    (void)n;
-    (void)answers;
+    if (n <= 0) {
+        printf("No questions available.\n");
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        printf("\n----------------------------------------\n");
+        printf("Question %d: %s\n", i + 1, qs[i].text);
+        printf("A) %s\n", qs[i].options[0]);
+        printf("B) %s\n", qs[i].options[1]);
+        printf("C) %s\n", qs[i].options[2]);
+        printf("D) %s\n", qs[i].options[3]);
+        
+        /* Note: Taking user input & storing answers will be completed in REQ-19 and REQ-20 */
+        answers[i] = 'A'; /* Temporary placeholder */
+    }
 }
