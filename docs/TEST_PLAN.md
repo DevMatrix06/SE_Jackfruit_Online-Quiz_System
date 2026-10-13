@@ -12,11 +12,11 @@
 
 **Purpose.** This document says how the Online Quiz System is tested: what is tested, how, with what, when and by whom. It also links every test case to the SRS requirement it checks.
 
-**Scope.** All functional requirements REQ-1 to REQ-22 and all non-functional requirements NFR-1 to NFR-5, including the security requirements SEC-1 to SEC-6 of SRS v1.2. Testing is done on the compiled program and on single C modules.
+**Scope.** All functional requirements REQ-1 to REQ-22 and all non-functional requirements NFR-1 to NFR-5, including the security requirements SEC-1 to SEC-6 of SRS v1.1. Testing is done on the compiled program and on single C modules.
 
 **References.**
-- Online Quiz System SRS v1.2 (`SRS.md`)
-- Software Architecture and Design Specification v1.1 (`docs/SAD.md`)
+- Online Quiz System SRS v1.1 (`SRS.md`)
+- Software Architecture and Design Specification v1.0 (`docs/SAD.md`)
 - Mini-project deliverables, Part-1 and Part-2
 
 **Definitions.**
@@ -264,7 +264,7 @@ Result key: **Pass** and **Fail** are recorded results; **Blocked** needs code t
 | NFR-4 | TC-03, TC-17 |
 | NFR-5 | TC-19 |
 
-Every requirement in SRS v1.2 appears in at least one test case.
+Every requirement in SRS v1.1 appears in at least one test case.
 
 ---
 

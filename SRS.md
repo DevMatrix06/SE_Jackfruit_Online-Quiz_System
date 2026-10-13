@@ -1,6 +1,6 @@
 # Software Requirements Specification
 ## Online Quiz System
-Version 1.2
+Version 1.1
 
 **Team:** Tejas, Sanjana, Vikas, Vaishnavi
 **Project:** UE24CS341A – Software Engineering, Jackfruit Phase 1
@@ -17,7 +17,6 @@ Version 1.2
 | Vaishnavi | Week 2 | Result Storage & Leaderboard feature (4.4), Nonfunctional Requirements (5.1–5.6), Appendices A & B added | 0.4 |
 | Team | Week 2 | Consolidated all sections, corrected requirement numbering (REQ-1 to REQ-22), completed Requirement Traceability Matrix | 1.0 |
 | Tejas | 12-Oct-2026 | Added UML use case diagram and use case table (3.5); added security objectives and requirements (5.3); gave NFRs IDs and measurable criteria (5.1-5.4, NFR-1 to NFR-5); fixed the pass threshold at 40% (REQ-10, BR-6); extended the traceability matrix | 1.1 |
-| Tejas | 12-Oct-2026 | Simplified the wording of the document (no change to the requirements) | 1.2 |
 
 ## Table of Contents
 

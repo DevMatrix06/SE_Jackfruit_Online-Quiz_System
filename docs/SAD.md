@@ -1,7 +1,7 @@
 # Software Architecture and Design Specification
 
 **Project:** Online Quiz System
-**Version:** 1.1
+**Version:** 1.0
 **Authors:** Team Jackfruit (Tejas, Sanjana, Vikas, Vaishnavi)
 **Date:** 12-10-2026
 **Status:** Baseline for Sprint-1
@@ -11,7 +11,6 @@
 | Version | Date | Author | Change Summary |
 |---|---|---|---|
 | 1.0 | 12-10-2026 | Team | First complete version, aligned with SRS v1.1 and the code on `main` |
-| 1.1 | 12-10-2026 | Team | Simplified the wording (no change to the design) |
 
 ## Approvals
 
@@ -27,7 +26,7 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-This document describes the architecture and design of the Online Quiz System, a console-based multiple-choice quiz program written in C. It shows how the requirements in the SRS (v1.2) are met by components, functions and data flow, so that the four team members can build their modules separately and test them against the Test Plan.
+This document describes the architecture and design of the Online Quiz System, a console-based multiple-choice quiz program written in C. It shows how the requirements in the SRS (v1.1) are met by components, functions and data flow, so that the four team members can build their modules separately and test them against the Test Plan.
 
 ### 1.2 Scope
 It covers the whole program: the main menu, the quiz engine, scoring and result display, and result storage with the leaderboard. It does not cover deployment (the program is one local executable) or anything outside the SRS scope, such as accounts, networking or a GUI.
@@ -57,7 +56,7 @@ Section 3 describes the architecture (components, pattern, traceability to requi
 
 | Document | Location |
 |---|---|
-| Software Requirements Specification v1.2 | `SRS.md` |
+| Software Requirements Specification v1.1 | `SRS.md` |
 | Software Test Plan v1.0 | `docs/TEST_PLAN.md` |
 | Requirements Traceability Matrix | SRS Appendix C and Section 3.8 of this document |
 | Team task split and shared signatures | `TEAM-TASKS.md` |
@@ -382,7 +381,7 @@ See SRS Appendix A. Additional terms: **Layered architecture** (modules are grou
 ### 5.2 References
 - IEEE 42010: Architecture description.
 - IEEE 1016: Software design descriptions.
-- Online Quiz System SRS v1.2 (`SRS.md`).
+- Online Quiz System SRS v1.1 (`SRS.md`).
 - OWASP: input validation guidance; CWE-120 (buffer overflow).
 
 ### 5.3 Tools
