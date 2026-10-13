@@ -47,10 +47,12 @@ Work in progress (Sprint-1).
 
 ## Documents
 
-- [SRS: what the program must do](SRS.md)
-- [SAD: how the program is built](docs/SAD.md)
-- [Test Plan: how we check it](docs/TEST_PLAN.md)
+- [SRS: what the program must do](docs/SRS.pdf)
+- [SAD: how the program is built](docs/SAD.pdf)
+- [Test Plan: how we check it](docs/Test_Plan.pdf)
 - [Team tasks](TEAM-TASKS.md)
+
+The same documents are also kept as text: [SRS.md](SRS.md), [docs/SAD.md](docs/SAD.md), [docs/TEST_PLAN.md](docs/TEST_PLAN.md).
 
 ## Team
 
@@ -63,6 +65,7 @@ Work in progress (Sprint-1).
 
 ## How we work
 
+- Requirements are written as user stories ("As a ..., I want ..., so that ...") and grouped under 6 epics (EPIC-1 to EPIC-6)
 - One GitHub issue per requirement, tracked on the project board
 - One pull request per issue, raised by the person it is assigned to
 - GitHub Actions builds the code on every push and pull request
