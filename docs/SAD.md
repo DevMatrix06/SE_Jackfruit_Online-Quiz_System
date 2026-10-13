@@ -12,15 +12,6 @@
 |---|---|---|---|
 | 1.0 | 12-10-2026 | Team | First complete version, aligned with SRS v1.1 and the code on `main` |
 
-## Approvals
-
-| Role | Name | Signature / Date |
-|---|---|---|
-| Project Lead / Repo Owner | Tejas | |
-| Quiz Engine Owner | Sanjana | |
-| Scoring Owner | Vikas | |
-| Storage Owner | Vaishnavi | |
-
 ---
 
 ## 1. Introduction
