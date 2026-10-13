@@ -35,15 +35,9 @@ It covers the whole program: the main menu, the quiz engine, scoring and result 
 Developers building the modules, testers writing test cases, the course evaluators, and anyone who works on the project later.
 
 ### 1.4 Definitions
-
-| Term | Meaning |
-|---|---|
-| MCQ | Multiple-choice question with exactly one correct option |
-| REQ-n | Functional requirement n in the SRS |
-| NFR-n / SEC-n | Non-functional / security requirement in the SRS |
-| ADR | Architecture decision record (a short note on a design choice and why it was made) |
-| STRIDE | A list of threat types: Spoofing (pretending to be someone), Tampering (changing data), Repudiation (denying an action), Information disclosure (showing private data), Denial of service (stopping the program from working), Elevation of privilege (getting rights you should not have) |
-| Console | Terminal window used for all input and output |
+- **MCQ:** multiple-choice question with exactly one correct option.
+- **REQ-n, NFR-n, SEC-n:** functional, non-functional and security requirements in the SRS.
+- **STRIDE:** a list of threat types (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege), used in 3.9.
 
 ---
 
@@ -53,40 +47,13 @@ Developers building the modules, testers writing test cases, the course evaluato
 Section 3 describes the architecture (components, pattern, traceability to requirements, security). Section 4 describes the design (sequence diagrams, functions, error handling, screens). Developers should read 3.4 and 4.3 before changing a module. Testers should read 3.8 and 4.4.
 
 ### 2.2 Related documents
-
-| Document | Location |
-|---|---|
-| Software Requirements Specification v1.1 | `SRS.md` |
-| Software Test Plan v1.0 | `docs/TEST_PLAN.md` |
-| Requirements Traceability Matrix | SRS Appendix C and Section 3.8 of this document |
-| Team task split and shared signatures | `TEAM-TASKS.md` |
+SRS (`SRS.md`), Test Plan (`docs/TEST_PLAN.md`), and the team task split with the shared function signatures (`TEAM-TASKS.md`).
 
 ---
 
 ## 3. Architecture
 
-### 3.1 Goals and Constraints
-
-**Goals**
-- Keep the program small, readable and easy to test (a mini-project, Easy tier).
-- Let four people work at the same time without editing each other's files (NFR-5).
-- Never crash on bad input or a missing file (NFR-4).
-- Run offline on any machine with a C compiler.
-
-**Constraints**
-- Plain C (C99), built with `gcc -Wall -std=c99`; no third-party libraries.
-- Console only, single user, single session; no GUI, no network, no database.
-- Data is saved only in local text files.
-- The shared function names and structs in `quiz.h`, `score.h` and `storage.h` are fixed, so the modules can be built at the same time.
-
-### 3.2 Stakeholders and Concerns
-
-| Stakeholder | Concern |
-|---|---|
-| Quiz taker | Clear prompts, instant result, no crashes |
-| Developers (4) | Separate modules, clear ownership, function names that do not change |
-| Testers | Output that can be checked, requirements that can be traced to tests |
-| Evaluators | Code follows the SRS, SAD and Test Plan; proof of the process (commits, pull requests) |
+The goals are a small, readable program that four people can build at the same time (NFR-5) and that never crashes on bad input or a missing file (NFR-4). The constraints are plain C (C99) built with `gcc -Wall -std=c99` and no third-party libraries; console only, one user, no network and no database; data is saved only in local text files; and the shared function names and structs in `quiz.h`, `score.h` and `storage.h` are fixed so the modules can be built in parallel.
 
 ### 3.3 Component (UML) Diagram
 
@@ -96,14 +63,12 @@ Section 3 describes the architecture (components, pattern, traceability to requi
 
 ### 3.4 Component Descriptions
 
-| Component | Files | What it does | Functions it offers | Depends on | Owner |
-|---|---|---|---|---|---|
-| Menu Controller | `src/main.c` | Shows the menu, checks the menu choice, asks for the player name, calls the chosen feature, shows instructions, exits cleanly | none (entry point) | IQuiz, IScore, IStorage | Tejas |
-| Quiz Engine | `src/quiz.c`, `include/quiz.h` | Loads the question bank, shows one question at a time, checks and records each answer | **IQuiz**: `load_questions`, `run_quiz` | `data/questions.txt` | Sanjana |
-| Scoring Module | `src/score.c`, `include/score.h` | Compares answers with the correct options, counts correct and incorrect answers, works out the percentage and Pass/Fail (40%), shows the result screen | **IScore**: `calculate_result`, `show_result` | `Question` type from `quiz.h` | Vikas |
-| Result Storage and Leaderboard | `src/storage.c`, `include/storage.h` | Adds `Name,Score` to `results.txt`, reads the results back, shows the leaderboard from high score to low | **IStorage**: `save_result`, `show_leaderboard` | `Result` type from `score.h`, `results.txt` | Vaishnavi |
-| Question Bank | `data/questions.txt` | Question text, four options and the correct letter | text file | | Sanjana |
-| Results File | `results.txt` (created when the program runs) | One `Name,Score` line per completed attempt | text file | | Vaishnavi |
+| Component | Files | What it does | Functions it offers | Owner |
+|---|---|---|---|---|
+| Menu Controller | `src/main.c` | Shows the menu, checks the menu choice, asks for the player name, calls the chosen feature, shows instructions, exits cleanly | none (entry point) | Tejas |
+| Quiz Engine | `src/quiz.c`, `include/quiz.h` | Loads the question bank (`data/questions.txt`), shows one question at a time, checks and records each answer | **IQuiz**: `load_questions`, `run_quiz` | Sanjana |
+| Scoring Module | `src/score.c`, `include/score.h` | Compares answers with the correct options, counts correct and incorrect answers, works out the percentage and Pass/Fail (40%), shows the result screen | **IScore**: `calculate_result`, `show_result` | Vikas |
+| Result Storage and Leaderboard | `src/storage.c`, `include/storage.h` | Adds `Name,Score` to `results.txt`, reads the results back, shows the leaderboard from high score to low | **IStorage**: `save_result`, `show_leaderboard` | Vaishnavi |
 
 The only link between modules is the two shared data types: `score.h` includes `quiz.h` (for `Question`) and `storage.h` includes `score.h` (for `Result`). Modules do not call each other's functions. The Menu Controller calls them one after another.
 
@@ -119,71 +84,40 @@ The only link between modules is the two shared data types: `score.h` includes `
 
 **Rationale.** The program has one user, runs as one process, and has three clear parts, which match how the team shares the work. Layers give each owner their own files (so pull requests do not clash), let each module be tested alone (`tests/test_score.c` uses only `score.c`), and keep file-format details out of the menu code.
 
-**Alternatives rejected**
-
-| Alternative | Why rejected |
-|---|---|
-| Client-server or microservices | There is no network and no second user; it would only make the program more complicated |
-| Single `main.c` with everything inside | Four people would edit one file; modules could not be tested alone; breaks NFR-5 |
-| Database for results | The SRS says no database; a text file is enough for a short leaderboard |
+**Alternatives rejected.** Client-server or microservices (there is no network and no second user), one big `main.c` (four people would edit one file and nothing could be tested alone), and a database (the SRS says no database and a text file is enough for a short leaderboard).
 
 **Key design decisions**
-
-| ADR | Decision | Result |
-|---|---|---|
-| ADR-1 | Layered modules, one source file and one header file per feature | Work at the same time, test each module alone |
-| ADR-2 | Text files for questions and results | No extra software needed; a person can read the file; nothing stops someone editing it (see 3.9) |
-| ADR-3 | Shared function names and structs are fixed | A module can be built before the modules it depends on exist (stubs) |
-| ADR-4 | Fixed-size arrays created by the caller, no dynamic memory | No memory leaks; the question limit is `MAX_QUESTIONS` (100) |
-| ADR-5 | Every module prints its own screens; errors are one line starting `Error:` | Screens look the same everywhere (NFR-3); no logging needed |
+- Text files for questions and results: no extra software is needed and a person can read them.
+- Shared function names and structs are fixed, so a module can be built before the modules it depends on exist.
+- Fixed-size arrays created by the caller and no dynamic memory, so there are no memory leaks (the question limit is `MAX_QUESTIONS`, 100).
 
 ### 3.6 Technology Stack and Data Stores
 
-| Item | Choice |
-|---|---|
-| Language / standard | C, C99 |
-| Compiler / build | GCC, `make` (`Makefile` builds `quiz`; `make test` runs the score tests) |
-| Version control / CI | Git, GitHub; GitHub Actions workflow runs `make` on every push and pull request |
-| Question bank | `data/questions.txt`: for each question, one line of text, four option lines, then one line with the correct letter A to D |
-| Results store | `results.txt`: one `Name,Score` line per attempt, appended |
-| Platforms | Windows, Linux, macOS terminals |
+- **Language and build:** C (C99), GCC and `make` (`make` builds `quiz`, `make test` runs the score tests).
+- **Version control and CI:** Git and GitHub; a GitHub Actions workflow runs `make` on every push and pull request.
+- **Question bank:** `data/questions.txt`. For each question: one line of text, four option lines, then one line with the correct letter A to D.
+- **Results store:** `results.txt`. One `Name,Score` line per attempt, appended.
 
 ### 3.7 Risks and Mitigations
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Quiz Engine not ready when others integrate | Cannot demo the whole quiz | Stubs (empty functions) with the agreed names were on `main`; scoring and storage were tested on their own. Now resolved: the engine is merged |
-| Question file is in the wrong format or missing | Quiz cannot start | `load_questions` returns an error; menu shows an error and continues (NFR-4) |
-| Two people edit the same file | Merge conflicts | File ownership table in `TEAM-TASKS.md`; one pull request per issue, reviewed by the repo owner |
+| Question file is in the wrong format or missing | Quiz cannot start | `load_questions` returns an error; the menu shows an error and continues (NFR-4) |
+| Two people edit the same file | Merge conflicts | One owner per file; one pull request per issue, reviewed by the repo owner |
 | `results.txt` edited by hand or damaged | Wrong leaderboard | Lines in the wrong format are skipped; the remaining risk is accepted (3.9) |
-| Windows line endings (`\r\n`) in `results.txt` | Names end with an extra `\r` | The reader removes `\r` before reading the line |
 
 ### 3.8 Traceability to Requirements
 
 | Requirement | Component | Function / location |
 |---|---|---|
-| REQ-1 Display menu | Menu Controller | `show_menu()` in `main.c` |
-| REQ-2 Validate menu input | Menu Controller | `read_menu_choice()` |
-| REQ-3 Re-prompt on invalid input | Menu Controller | main loop in `main()` |
-| REQ-4 Navigate to feature | Menu Controller | `switch` in `main()`, `show_instructions()` |
-| REQ-5 Return to menu | Menu Controller | `do ... while` loop in `main()` |
-| REQ-6 Clean exit | Menu Controller | exit path of `main()` |
-| REQ-7 Compare answer, update score | Scoring | `calculate_result()` |
-| REQ-8 Count correct/incorrect | Scoring | `calculate_result()` |
-| REQ-9 Total score and percentage | Scoring | `calculate_result()` |
-| REQ-10 Pass/Fail at 40% | Scoring | `PASS_PERCENT` in `score.c` |
-| REQ-11 Display result | Scoring | `show_result()` |
-| REQ-12 Pass result to storage | Menu Controller, Storage | `save_result(name, &result)` call in `start_quiz()` |
-| REQ-13 Save name and score | Storage | `save_result()` |
-| REQ-14 Read stored results | Storage | `show_leaderboard()` (read step) |
-| REQ-15 Sorted leaderboard | Storage | `show_leaderboard()` (sort step) |
-| REQ-16 Missing file handled | Storage | `show_leaderboard()` |
-| REQ-17 Load questions | Quiz Engine | `load_questions()` |
-| REQ-18 One question at a time | Quiz Engine | `run_quiz()` |
-| REQ-19 Validate answer | Quiz Engine | `run_quiz()` |
-| REQ-20 Record answer | Quiz Engine | `run_quiz()` fills `answers[]` |
-| REQ-21 Next question | Quiz Engine | `run_quiz()` |
-| REQ-22 Continue until complete | Quiz Engine | `run_quiz()` |
+| REQ-1 to REQ-6 (menu, validation, navigation, exit) | Menu Controller | `show_menu()`, `read_menu_choice()`, loop and `switch` in `main()` |
+| REQ-7 to REQ-10 (score, counts, percentage, Pass/Fail at 40%) | Scoring | `calculate_result()`, `PASS_PERCENT` |
+| REQ-11 (display result) | Scoring | `show_result()` |
+| REQ-12 (pass result to storage) | Menu Controller, Storage | `save_result(name, &result)` call in `start_quiz()` |
+| REQ-13 (save name and score) | Storage | `save_result()` |
+| REQ-14 to REQ-16 (read, sort, missing file) | Storage | `show_leaderboard()` |
+| REQ-17 (load questions) | Quiz Engine | `load_questions()` |
+| REQ-18 to REQ-22 (show, validate, record, next, finish) | Quiz Engine | `run_quiz()` |
 | NFR-1 Performance | all | no heavy processing; input handled line by line |
 | NFR-2 Security (SEC-1 to SEC-6) | all | see 3.9 |
 | NFR-3 Usability | all | `Error:` prefix and re-prompt (4.5) |
@@ -192,26 +126,15 @@ The only link between modules is the two shared data types: `score.h` includes `
 
 ### 3.9 Security Architecture
 
-The system has no accounts, no network and no special rights. Bad data can come in from two places: (a) the keyboard, which cannot be trusted, and (b) the two local files, which any user of the computer can edit.
-
-**Threat model (STRIDE)**
+The system has no accounts, no network and no special rights. Bad data can come in from two places: the keyboard, which cannot be trusted, and the two local files, which any user of the computer can edit. Spoofing and repudiation are not handled, because there is no login by design (single local user).
 
 | Threat | Scenario | Control | Requirement |
 |---|---|---|---|
-| Spoofing | Typing someone else's name | Not handled: there is no login by design (single local user) | SRS 5.3 |
 | Tampering | A name with a comma or new line damages the results file or fakes another record | Commas, `\r` and `\n` in the name are replaced by spaces before saving | SEC-2 |
 | Tampering | Editing `results.txt` by hand | Risk accepted; lines in the wrong format are skipped | SEC-4 |
-| Repudiation | Someone denies their score | Not needed for a local practice tool | |
-| Information disclosure | Error text shows paths or system details | Only fixed one-line messages; no `perror`, no file names, no addresses | SEC-1 |
-| Denial of service (crash) | Very long input, empty input, end of input, missing or unreadable file | Size-limited `fgets` buffers, extra characters discarded, end of input detected, every file call checked | SEC-3, SEC-4, SEC-6 |
-| Buffer overflow | A long name or menu line writes past the end of a buffer | Fixed buffers (64 bytes), length checked, `strtol` with a check of the end pointer | SEC-3 |
+| Information disclosure | Error text shows paths or system details | Only fixed one-line messages; no file names or addresses | SEC-1 |
+| Denial of service, buffer overflow | Very long input, empty input, end of input, missing or unreadable file | Size-limited `fgets` buffers, extra characters discarded, end of input detected, every file call checked | SEC-3, SEC-4, SEC-6 |
 | Elevation of privilege | Making the program open a file of the user's choice | File names are fixed in the code and never taken from input | SEC-5 |
-
-**Security design rules for all modules**
-1. Read keyboard input only with functions that have a size limit (`fgets`); never `gets` or `scanf("%s")` without a limit.
-2. Check the result of every file call and every `NULL` pointer.
-3. Print only the fixed messages listed in 4.4.
-4. Use constants for file names.
 
 ---
 
@@ -237,7 +160,7 @@ typedef struct {            /* score.h */
 } Result;
 ```
 
-`score` equals `correct` (one mark per question), so `score + incorrect == total`. `main.c` holds the questions in a static array of `MAX_QUESTIONS` (100) and the answers in a `char` array, set to zero first, so unanswered questions never count as correct.
+`main.c` holds the questions in a static array of `MAX_QUESTIONS` (100) and the answers in a `char` array that is set to zero first, so unanswered questions never count as correct.
 
 ### 4.2 UML Sequence Diagrams
 
@@ -253,49 +176,16 @@ typedef struct {            /* score.h */
 
 All interfaces are C functions declared in the header files. There is no network.
 
-#### IQuiz (`include/quiz.h`, implemented in `src/quiz.c`)
+| Function | Interface | What it does | Returns | On error |
+|---|---|---|---|---|
+| `int load_questions(const char *path, Question qs[], int max)` | IQuiz (`quiz.h`) | Reads up to `max` questions from the file into `qs` | Number loaded, or -1 on error | File missing or no valid question: -1 (the caller prints the message) |
+| `void run_quiz(const Question qs[], int n, char answers[])` | IQuiz (`quiz.h`) | Shows questions 0 to n-1 one at a time and stores each answer as `'A'` to `'D'` | nothing; `answers[i]` is filled | Invalid choice: `Error:` line and the same question again. End of input: stops, remaining answers stay 0 |
+| `Result calculate_result(const Question qs[], const char answers[], int n)` | IScore (`score.h`) | Checks the answers and works out score, counts, percentage and Pass/Fail (>= 40%) | A `Result` | NULL argument or `n <= 0`: all-zero `Result` |
+| `void show_result(const Result *r)` | IScore (`score.h`) | Prints score, percentage, counts and Pass/Fail | nothing | `r` is NULL: `Error: result is unavailable.` |
+| `int save_result(const char *name, const Result *r)` | IStorage (`storage.h`) | Appends one `Name,Score` line to `results.txt`; commas and new lines in the name become spaces (SEC-2) | 0 on success, -1 on error | NULL argument or file problem: -1, prints nothing |
+| `void show_leaderboard(void)` | IStorage (`storage.h`) | Reads `results.txt` and prints the entries from highest to lowest score | nothing | File missing or unreadable: short "no results yet" message; bad lines are skipped |
 
-| | `int load_questions(const char *path, Question qs[], int max)` |
-|---|---|
-| Purpose | Read up to `max` questions from the file at `path` into `qs` |
-| Returns | Number of questions loaded (>= 1), or -1 on error |
-| Errors | File cannot be opened or contains no valid question: returns -1 (the caller prints the message) |
-| Notes | Every loaded question has exactly one correct letter A to D |
-
-| | `void run_quiz(const Question qs[], int n, char answers[])` |
-|---|---|
-| Purpose | Present questions 0 to n-1 one at a time and store each answer |
-| After the call | `answers[i]` is `'A'` to `'D'` for each question that was answered |
-| Errors | Invalid choice: prints an `Error:` line and asks again; end of input: returns with the remaining answers untouched (the caller sets the array to zero first) |
-
-#### IScore (`include/score.h`, implemented in `src/score.c`)
-
-| | `Result calculate_result(const Question qs[], const char answers[], int n)` |
-|---|---|
-| Purpose | Check the answers and work out the result |
-| Returns | A `Result`: `score`, `correct`, `incorrect`, `total`, `percent = score / total * 100`, `passed = (percent >= 40.0)` |
-| Errors | `qs` or `answers` is NULL, or `n <= 0`: returns an all-zero `Result` |
-
-| | `void show_result(const Result *r)` |
-|---|---|
-| Purpose | Print score, percentage, correct and incorrect counts, and Pass/Fail |
-| Errors | `r` is NULL: prints `Error: result is unavailable.` |
-
-#### IStorage (`include/storage.h`, implemented in `src/storage.c`)
-
-| | `int save_result(const char *name, const Result *r)` |
-|---|---|
-| Purpose | Append one `Name,Score` line to `results.txt` |
-| Returns | 0 on success, -1 on any error |
-| Errors | NULL argument, file cannot be opened or closed: returns -1 and prints nothing |
-| Notes | Commas, `\r` and `\n` in `name` are replaced by spaces (SEC-2) |
-
-| | `void show_leaderboard(void)` |
-|---|---|
-| Purpose | Read `results.txt` and print the entries sorted by score, highest first |
-| Errors | File missing or unreadable: prints a short "no results yet" message and returns; lines in the wrong format are skipped |
-
-#### File formats
+**File formats**
 
 ```
 questions.txt   (repeated per question)
@@ -314,18 +204,15 @@ results.txt     (one per attempt)
 
 Each error is shown as one line starting with `Error:`, and then the program goes back to a safe place (usually the menu). No error message contains a file name, path or system error code (SEC-1).
 
-| # | Condition | Detected by | Response | Requirement |
-|---|---|---|---|---|
-| E1 | Menu input is non-numeric, empty, has trailing text or is outside 1 to 4 | `read_menu_choice()` | `Error: please enter a number from 1 to 4.` then the menu again | REQ-3 |
-| E2 | Menu line longer than the buffer | `read_menu_choice()` | Rest of the line discarded, same message as E1 | SEC-3 |
-| E3 | End of input at the menu | `fgets` returns NULL | Goodbye message, clean exit | SEC-6 |
-| E4 | Empty player name | `start_quiz()` | Name defaults to `Player` | NFR-3 |
-| E5 | Question file missing, unreadable or empty | `load_questions()` returns <= 0 | `Error: could not load any questions.` and return to menu | NFR-4 |
-| E6 | Invalid answer during the quiz | `run_quiz()` | `Error:` line and the same question again | REQ-19 |
-| E7 | Scoring called with NULL or `n <= 0` | `calculate_result()` | Zeroed `Result`; `show_result(NULL)` prints `Error: result is unavailable.` | NFR-4 |
-| E8 | Results file cannot be written | `save_result()` returns -1 | `Error: could not save your result.` and return to menu | SEC-4 |
-| E9 | Results file missing at the leaderboard | `show_leaderboard()` | Short "no results yet" message and return to menu | REQ-16 |
-| E10 | A line in `results.txt` is in the wrong format | `show_leaderboard()` | Line skipped | SEC-4 |
+| # | Condition | Response | Requirement |
+|---|---|---|---|
+| E1 | Menu input is not 1 to 4 (letters, empty, too long) | `Error: please enter a number from 1 to 4.` then the menu again | REQ-3, SEC-3 |
+| E2 | End of input at the menu | Goodbye message, clean exit | SEC-6 |
+| E3 | Question file missing, unreadable or empty | `Error: could not load any questions.` and back to the menu | NFR-4 |
+| E4 | Invalid answer during the quiz | `Error:` line and the same question again | REQ-19 |
+| E5 | Results file cannot be written | `Error: could not save your result.` and back to the menu | SEC-4 |
+| E6 | Results file missing at the leaderboard, or a line in the wrong format | Short "no results yet" message, or the line is skipped | REQ-16, SEC-4 |
+| E7 | Scoring called with NULL or `n <= 0` | Zeroed `Result`; `show_result(NULL)` prints `Error: result is unavailable.` | NFR-4 |
 
 **Logging.** The quiz keeps no log file, because a log file would be one more place where information could leak. Errors are shown on the screen only.
 
@@ -338,8 +225,6 @@ Each error is shown as one line starting with `Error:`, and then the program goe
 - Every error starts with `Error:` and is followed by a new prompt.
 - No colour or cursor control, so it works in any terminal.
 
-**Main menu**
-
 ```
 ===== Online Quiz System =====
 1. Start Quiz
@@ -349,34 +234,20 @@ Each error is shown as one line starting with `Error:`, and then the program goe
 Enter your choice (1-4):
 ```
 
-**Result screen**
-
-```
-===== Quiz Results =====
-Score: 4/5
-Percentage: 80.00%
-Correct answers: 4
-Incorrect answers: 1
-Result: Pass
-```
-
 ### 4.6 Open Issues and Next Steps
 
 | # | Item | Plan |
 |---|---|---|
-| 1 | Quiz Engine (`load_questions`, `run_quiz`) | Done in Sprint-1 (REQ-17 to REQ-22); closed |
-| 2 | Leaderboard read and sort are not implemented | Sprint-2, Vaishnavi (REQ-14 to REQ-16) |
-| 3 | REQ-12 says "score and percentage" are passed to storage, but the file stores name and score only (BR-4, Appendix B) | The whole `Result` is passed; only name and score are saved. BR-4 stays as the saved format |
-| 4 | The question file format is shown only by the sample file | `load_questions` reads 6 lines per question: text, options A to D, then the correct letter |
-| 5 | Equal scores have no set order on the leaderboard | Keep the order they appear in the file |
-| 6 | Limit of 100 questions | Enough for this project; review it only if the question bank grows |
+| 1 | Leaderboard read and sort are not implemented | Sprint-2, Vaishnavi (REQ-14 to REQ-16) |
+| 2 | REQ-12 says "score and percentage" are passed to storage, but the file stores name and score only (BR-4) | The whole `Result` is passed; only name and score are saved |
+| 3 | Equal scores have no set order on the leaderboard | Keep the order they appear in the file |
 
 ---
 
 ## 5. Appendices
 
 ### 5.1 Glossary
-See SRS Appendix A. Additional terms: **Layered architecture** (modules are grouped in layers, and a layer only calls the layers below it), **Stub** (a function with the final name and arguments that does nothing yet).
+See SRS Appendix A.
 
 ### 5.2 References
 - IEEE 42010: Architecture description.
