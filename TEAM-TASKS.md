@@ -3,7 +3,7 @@
 Hi all. The backlog for our Online Quiz System is ready on GitHub. Every requirement from our SRS is now an issue with story points, assigned to the person who owns that SRS section. You're already collaborators on the repo.
 
 - **Board:** https://github.com/users/DevMatrix06/projects/3 (filter by your name to see your issues)
-- **Repo:** https://github.com/DevMatrix06/SE_Jackfruit_Online-Quiz_System
+- **Repo:** https://github.com/SoftwareEngineering-MiniProject/SE_Jackfruit_Online-Quiz_System
 - **SRS:** `SRS.md` in the repo. Your code must do what your section says.
 
 **Your job:** build your own issues, open one pull request (PR) per issue, and I (Tejas) review and merge. The brief says the person assigned must raise the PR themselves, so don't send me code to push.
@@ -103,7 +103,7 @@ Every issue on the board has acceptance criteria in its description. Your work i
 
 One-time setup:
 ```
-git clone https://github.com/DevMatrix06/SE_Jackfruit_Online-Quiz_System
+git clone https://github.com/SoftwareEngineering-MiniProject/SE_Jackfruit_Online-Quiz_System
 cd SE_Jackfruit_Online-Quiz_System
 ```
 
